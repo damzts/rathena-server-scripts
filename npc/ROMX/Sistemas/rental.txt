@@ -1,0 +1,136 @@
+-	script	rental	-1,{
+OnPCLoginEvent:
+if (#itemsrental==0){
+getexp 8500,5840;
+rentitem 5013,3944616;
+rentitem 5325,3944616;
+getitem 20006,1;
+getitem 20007,1;
+getitem 20009,1;
+getitem 20010,1;
+getitem 20233,1;
+set #itemsrental,1;
+mes "Hola!~";
+next;
+mes "Soy un asistente personal, te dare objetos de bienvenida al servidor dependiendo tu clase!";
+next;
+mes "[PAUSA]En el siguiente menu escojeras tu clase y se te daran los objetos designados a ella, si cancelas no te sera posible volver a escojer.. asi que ten cuidado!";
+sleep2 8000;
+next;
+mes "Escoje la clase que vas a ser";
+sleep2 1000;
+next;
+switch(select("Knight.:Wizard.:Priest.:Hunter.:Blacksmith.:Assassin.:Crusader:Sage:Monk:Bard:Dancer:Alchemist:Rogue:Ninja.:Taekwon.:Super Novice:Gunslinger")) {
+case 1:
+rentitem 27031,3944616;
+getitem 13945,1;
+if(Class==0)
+callfunc "Job_Change", Job_Swordman;
+close;
+break;
+case 2:
+rentitem 27035,3944616;
+getitem 13946,1;
+if(Class==0)
+callfunc "Job_Change", Job_Magician;
+close;
+break;
+case 3:
+rentitem 27032,3944616;
+getitem 13947,1;
+if(Class==0)
+callfunc "Job_Change", Job_Acolyte;
+close;
+break;
+case 4:
+rentitem 27026,3944616;
+getitem 13948,1;
+if(Class==0)
+callfunc "Job_Change", Job_Archer;
+close;
+break;
+case 5:
+rentitem 27033,3944616;
+getitem 13949,1;
+if(Class==0)
+callfunc "Job_Change", Job_Merchant;
+close;
+break;
+case 6:
+rentitem 27027,3944616;
+getitem 13950,1;
+if(Class==0)
+callfunc "Job_Change", Job_Thief;
+close;
+break;
+case 7:
+rentitem 27080,3944616;
+getitem 13945,1;
+if(Class==0)
+callfunc "Job_Change", Job_Swordsman;
+close;
+break;
+case 8:
+rentitem 27029,3944616;
+getitem 13946,1;
+if(Class==0)
+callfunc "Job_Change", Job_Magician;
+close;
+break;
+case 9:
+rentitem 27022,3944616;
+getitem 13947,1;
+if(Class==0)
+callfunc "Job_Change", Job_Acolyte;
+close;
+break;
+case 10:
+rentitem 27025,3944616;
+getitem 13948,1;
+if(Class==0)
+callfunc "Job_Change", Job_Archer;
+close;
+case 11:
+rentitem 27024,3944616;
+getitem 13948,1;
+if(Class==0)
+callfunc "Job_Change", Job_Archer;
+close;
+break;
+case 12:
+rentitem 27034,3944616;
+getitem 13949,1;
+if(Class==0)
+callfunc "Job_Change", Job_Merchant;
+close;
+break;
+case 13:
+rentitem 27021,3944616;
+getitem 13950,1;
+if(Class==0)
+callfunc "Job_Change", Job_Thief;
+close;
+break;
+case 14:
+rentitem 27028,3944616;
+if(Class==0)
+callfunc "Job_Change", Job_Ninja;
+close;
+case 15:
+rentitem 27036,3944616;
+if(Class==0)
+callfunc "Job_Change", Job_Taekwon;
+close;
+case 16:
+rentitem 27137,3944616;
+close;
+case 17:
+rentitem 27030,3944616;
+callfunc "Job_Change", Job_Gunslinger;
+close;
+}
+
+}
+}
+end;
+}

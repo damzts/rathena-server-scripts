@@ -1,0 +1,41 @@
+pvp_n_1-5,85,115,0	script	PvP Warp#Return	50,{
+mes "Deseas salir de PvP? - Necesitas esperar 10 segundos para poder sacarte de aqui.";
+switch(select("No:Si")) {
+case 1:
+mes "Bien, ese es el espiritu.";
+next;
+mes "Disfruta asesinando. >=)";
+close;
+break;
+
+case 2:
+close2;
+set muertoenpvp,0;
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "10 Segundos para salir.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "9.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "8.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "7.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "6.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "5.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "4.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "3.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "2.";
+sleep2 1000;if (muertoenpvp==1)end;
+dispbottom "1.";
+sleep2 1000;if (muertoenpvp==1)end;
+warp "prontera",156,191;
+}
+
+OnPCDieEvent:
+set muertoenpvp,1;
+end;
+}

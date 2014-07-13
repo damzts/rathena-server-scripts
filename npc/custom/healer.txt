@@ -1,0 +1,55 @@
+//===== eAthena Script =======================================
+//= Healer
+//===== By: ==================================================
+//= Euphy
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= eAthena SVN
+//===== Description: =========================================
+//= Basic healer script.
+//============================================================
+
+-	script	Healer	-1,{
+	
+	set .@Price,17*BaseLevel;	// Zeny required for heal
+	set .@Buffs,1;	// Also buff players? (1: yes / 0: no)
+	set .@Delay,15;	// Heal delay, in seconds
+
+	callfunc "F_ClearGarbage",0;
+	if (@HD > gettimetick(2)) end;
+	if (.@Price) {
+		mes "Para bendecirte necesito una donacion de "+.@Price+"z.";
+		mes "(17z por nivel)";
+		if (Zeny < .@Price) { mes "Pero no tienes lo suficiente.."; close; }
+		next;
+		mes "Quieres que te bendiga?"; 
+		if(select("^0055FFSi^000000:^777777Cancelar^000000")==2) close;
+		set Zeny, Zeny-.@Price;
+	}
+	specialeffect2 313; percentheal 100,100;
+	if (.@Buffs) {
+		specialeffect2 37; sc_start SC_INCREASEAGI,300000,10;
+		specialeffect2 42; sc_start SC_BLESSING,300000,10;
+		specialeffect2 440; sc_start 115,150000,10;
+	}
+	if (.@Delay) set @HD, gettimetick(2)+.@Delay;
+	close;
+}
+
+alberta,185,144,5	duplicate(Healer)	Buffer#alb	758
+aldebaran,146,116,3	duplicate(Healer)	Buffer#alde	758
+amatsu,200,80,5	duplicate(Healer)	Buffer#ama	758
+ayothaya,155,111,5	duplicate(Healer)	Buffer#ayo	758
+comodo,188,162,5	duplicate(Healer)	Buffer#com	758
+geffen,121,61,5	duplicate(Healer)	Buffer#gef	758
+gonryun,164,130,5	duplicate(Healer)	Buffer#gon	758
+izlude,125,118,5	duplicate(Healer)	Buffer#izl	758
+louyang,225,103,5	duplicate(Healer)	Buffer#lou	758
+morocc,159,96,5	duplicate(Healer)	Buffer#mor	758
+niflheim,188,180,5	duplicate(Healer)	Buffer#nif	758
+payon,180,105,5	duplicate(Healer)	Buffer#pay	758
+prontera,146,169,5	duplicate(Healer)	Buffer#pront	758
+umbala,94,162,5	duplicate(Healer)	Buffer#umb	758
+xmas,149,136,5	duplicate(Healer)	Buffer#xmas	758
+yuno,152,186,5	duplicate(Healer)	Buffer#yuno	758

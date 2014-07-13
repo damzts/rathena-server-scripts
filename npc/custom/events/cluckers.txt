@@ -1,0 +1,120 @@
+//===== rAthena Script =======================================
+//= Cluck! Cluck! Boom!
+//===== By: ==================================================
+//= Keale
+//===== Current Version: =====================================
+//= 1.2a
+//===== Compatible With: =====================================
+//= rAthena SVN
+//===== Description: =========================================
+//= Click the chicken and try retrieve the item at a low 
+//= chance. If you fail he will nuke, freeze, stone, 
+//= stun, or make you fall asleep.
+//= The prize is configurable and triggered by the NPC.
+//===== Additional Comments: =================================
+//= 1.0 First release.
+//= 1.1 Using 'switch rand' instead.
+//= 1.2 Cleaned and standardized. [Euphy]
+//= 1.2a Switched 'atcommand' to 'unitskilluseid'.
+//============================================================
+
+prontera,146,163,6	script	Cluckers	800,{
+
+	set .@GMAccess,80;	// GM level required to access NPC
+
+	if (.startcluck) {
+		specialeffect2 2;
+		switch(rand(15)) {
+			case 0: npctalk "CLUUUUUUCK!!!"; unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1; emotion 23; break;
+			case 1: npctalk "Cluuuuuck!~"; break;
+			case 2: unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1; break;
+			case 3: sc_start SC_Freeze,10000,0; break;
+			case 4: npctalk "CLUUUUUUUUUCK!!!"; unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1; emotion 23; break;
+			case 5: sc_start SC_Sleep,10000,0; break;
+			case 6: sc_start SC_Stone,10000,0; emotion 29; break;
+			case 7: npctalk "CLUUUUUUCK!!!"; unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1; emotion 23; break;
+			case 8: npctalk "Cluck! CLUUUCK!!"; unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1; emotion 23; break;
+			case 9: sc_start SC_Stun,10000,0; break;
+			case 10: sc_start SC_Sleep,10000,0; emotion 29; break;
+			case 11: npctalk "Cluck! Cluck!"; break;
+			case 12: sc_start SC_Stun,10000,0; break;
+			case 13: unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1; break;
+			default:
+				if (rand(50) < 10) {
+					npctalk "WOOF!...........";
+					specialeffect2 72;
+					announce "[Cluck! Cluck! Boom!] " + strcharinfo(0) + " le quito el premio a la gallina! Bien hecho!",0;
+					getitem $cluck_item_id,$cluck_item_amount;
+					set .startcluck,0;
+				} else {
+					npctalk "Cluck! CLUUUCK!!";
+					unitskilluseid getcharid(3),"NPC_SELFDESTRUCTION",1;
+				}
+				break;
+		}
+		end;
+	}
+	mes "[Cluckers]";
+	if (getgmlevel() >= .@GMAccess) {
+		mes "Cluck cluck! Cluuuuuck? ^FF0000~Hola GM " + strcharinfo(0) + ", Quieres jugar hoy?~^000000";
+		mes "Cluck cluck... CLUCK! ^FF0000~Solo dime que hacer!~^000000";
+		next;
+		while(1) switch(select("Comenzar Evento:Checar Premio:Configurar Premio:No hoy cluckers")) {
+			case 1:
+				mes "[Cluckers]";
+				mes "CLUCK! ^FF0000~Claro!~^000000";
+				emotion 33;
+				close2;
+				announce "[Cluck! Cluck! Boom!] esta apunto de comenzar en prontera!",bc_blue;
+				initnpctimer;
+				end;
+			case 2:
+				mes "[Cluckers]";
+				mes "Cluck, cluck cluck... Cluck! ^FF0000~El premio actual es^000000 ^008000"+ $cluck_item_amount +" "+ getitemname($cluck_item_id) +".^000000";
+				next;
+				break;
+			case 3:
+				mes "[Cluckers]";
+				mes "Cluck cluck? Cluck??? ^FF0000~Cual deberia ser el premio? Introduce la ID.~^000000";
+				input $cluck_item_id;
+				next;
+				mes "[Cluckers]";
+				mes "Cluck? cluuuck? ^FF0000~Cantidad?~^000000";
+				input $cluck_item_amount;
+				next;
+				mes "[Cluckers]";
+				mes "Cluck cluck..? Cluck. ^FF0000~Entonces, el premio es^000000 ^008000"+ $cluck_item_amount +" "+ getitemname($cluck_item_id) +"^000000? ^FF0000Genial.~^000000";
+				emotion 33;
+				next;
+				break;
+			case 4:
+				mes "[Cluckers]";
+				mes "Cluck cluck cluck...";
+				close;
+		}
+	}
+	mes "Cluck cluck! Cluuuuuck?";
+	mes "Cluck....";
+	close;
+
+OnTimer10000:
+	announce "Ve a prontera e intenta quitarle el objeto a la gallina!",bc_blue;
+	end;
+OnTimer20000:
+	announce "Cluckers se comio uno de mis objetos, las gallinas me dan miedo como para quitarselo..",bc_blue;
+	end;
+OnTimer30000:
+	announce "Dale click a la gallina loca e intenta quitarle el objeto, si tienes suerte ganaras!. Estas listo?",bc_blue;
+	end;
+OnTimer40000:
+	announce "VAMOS! Clickea a la gallina e intenta quitarle el objeto!",bc_blue;
+	stopnpctimer;
+	if (!$cluck_item_id) set $cluck_item_id,512;
+	if (!$cluck_item_amount) set $cluck_item_amount,1;
+	set .startcluck,1;
+	end;
+	
+OnMinute30: .@comienzo = rand(4); if (!.@comienzo == 1) end;
+initnpctimer;
+close;
+}

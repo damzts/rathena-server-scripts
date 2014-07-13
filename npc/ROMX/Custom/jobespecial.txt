@@ -1,0 +1,131 @@
+prontera,151,193,6	script	Clases Especiales	124,{
+	if(yasoysupernoviceextended == 1){	mes "^ff0000[Clases Especiales]^000000"; mes"?.."; sleep2 700; close;}
+	if(yasoysuperbabyextended == 1){	mes "^ff0000[Clases Especiales]^000000"; mes"?.."; sleep2 700; close;}
+	if(Class == Job_Oboro || Class == Job_Kagerou){	mes "^ff0000[Clases Especiales]^000000"; mes"?.."; sleep2 700; close;}
+	if(SkillPoint != 0){mes "^ff0000[Clases Especiales]^000000";mes "Lo siento, debes utilizar todos tus puntos de skill antes de cambiar de Job.";mes "Porfavor, regresa cuando lo hagas..";close;}
+
+	if(Class == Job_Ninja){
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Para ser Kagerou u Oboro necesitas ser almenos Job Lvl 70";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Y Base Lvl 99 o Mayor para poder cambiar..";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Deseas cambiar?";
+	switch(select("Si:No")) {
+	case 1:
+	if(BaseLevel > 98 && JobLevel > 69){
+	if(Sex == 0)
+	callfunc "Job_Change", Job_Oboro;
+	else
+	callfunc "Job_Change", Job_Kagerou;
+	mes "Ahi tienes..";
+	close;
+	end;
+	}
+	else
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "No cumples con los requerimentos..";
+	close;
+
+	case 2:
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Vuelve luego entonces..";
+	close;
+
+}
+}
+
+if (Class==Job_Super_Baby){
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Veo que eres Super Baby..";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Yo puedo convertirte en Super Baby Extended!";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Solo tienes que cumplir algunas cosas..";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Tienes que ser Base Lvl 99 y Job Lvl 99";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Entonces..";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Quieres cambiar?";
+	switch(select("Si:No")) {
+	case 1:
+	if(BaseLevel > 98 && JobLevel > 98){
+	if(Class == Job_Super_Baby){
+	atcommand "@job 4191";}
+	set yasoysuperbabyextended,1;
+	mes "Ahi tienes..";
+	close;
+	end;
+	}
+	else
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "No cumples con los requerimentos..";
+	close;
+
+	case 2:
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Vuelve luego entonces..";
+	close;
+	
+}
+}
+
+if(Class == Job_SuperNovice){
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Veo que eres Super Novice..";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Yo puedo convertirte en Super Novice Extended!";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Solo tienes que cumplir algunas cosas..";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Tienes que ser Base Lvl 99! y Job Lvl 99";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Entonces..";
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Quieres cambiar?";
+	switch(select("Si:No")) {
+	case 1:
+	if(BaseLevel == 99 && JobLevel == 99){
+	if(Class == Job_SuperNovice){
+	atcommand "@job 4190";}
+	set yasoysupernoviceextended,1;
+	mes "Ahi tienes..";
+	close;
+	end;
+	}
+	else
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "No cumples con los requerimentos..";
+	close;
+
+	case 2:
+	next;
+	mes "^ff0000[Clases Especiales]^000000";
+	mes "Vuelve luego entonces..";
+	close;
+
+}
+	close;
+	
+
+}
+mes "^ff0000[Clases Especiales]^000000";mes "Solo atiendo a Ninjas, Super Babys y Super Novices.."; close; end;
+}

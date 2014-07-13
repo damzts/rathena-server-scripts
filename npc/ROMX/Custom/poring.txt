@@ -1,0 +1,71 @@
+	-	script	DropPoring	-1,{
+OnNPCKillEvent:
+switch (killedrid) {
+
+case 1904: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,1;
+break;
+
+case 1031: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,1;
+break;
+
+case 1002: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,1;
+break;
+
+case 1062: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,1;
+break;
+
+case 1836: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,1;
+break;
+
+case 1242: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,1;
+break;
+
+case 1090: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,10;
+break;
+
+case 1096: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,10;
+break;
+
+case 1388: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,10;
+break;
+
+case 1582: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,10;
+break;
+
+case 1977: 
+set dropPC,rand(0,8); 
+if (dropPC==1)
+getitem 7539,10;
+break;
+}
+}

@@ -1,0 +1,96 @@
+
+-	script	Limited Items	-1,{
+function	LimitItems;
+function	CheckItems;
+
+OnInit:
+// GM Level to Bypass
+set .GMLevel,100;
+// Check Every X Seconds
+set .Seconds,5;
+// Apply on Which Maps and what Zone No.
+setarray .DisableMap$, // "<mapname>","<zone number>",
+				"guild_vs1","0",
+				"guild_vs2","1",
+				"guild_vs3","2",
+				"guild_vs4","3",
+				"guild_vs5","4",
+				"aldeg_cas01","5",
+				"aldeg_cas02","5",
+				"aldeg_cas03","5",
+				"aldeg_cas04","5",
+				"aldeg_cas05","5",
+				"arug_cas01","5",
+				"arug_cas02","5",
+				"arug_cas03","5",
+				"arug_cas04","5",
+				"arug_cas05","5",
+				"gefg_cas01","5",
+				"gefg_cas02","5",
+				"gefg_cas03","5",
+				"gefg_cas04","5",
+				"gefg_cas05","5",
+				"payg_cas01","5",
+				"payg_cas02","5",
+				"payg_cas03","5",
+				"payg_cas04","5",
+				"payg_cas05","5",
+				"prtg_cas01","5",
+				"prtg_cas02","5",
+				"prtg_cas03","5",
+				"prtg_cas04","5",
+				"prtg_cas05","5",
+				"schg_cas01","5",
+				"schg_cas02","5",
+				"schg_cas03","5",
+				"schg_cas04","5",
+				"schg_cas05","5",
+				"pvp_n_1-5","6";
+// Initialize Mapflags
+for( set .i,0; .i < getarraysize( .DisableMap$ ); set .i,.i + 2 )
+	setmapflag .DisableMap$[.i],mf_loadevent;
+end;
+
+OnPCLoadMapEvent:
+if( getgmlevel() >= .GMLevel ) end;
+for( set .@i,0; .@i < getarraysize( .DisableMap$ ); set .@i,.@i + 2 )
+	while( strcharinfo(3) == .DisableMap$[.@i] ){
+		if( LimitItems( atoi( .DisableMap$[.@i+1] ) ) ){
+			message strcharinfo(0),"Limite de objetos exedido.";
+			mes " ";
+			mes "^777777-------------------^000000";
+			mes "Los objetos antes mencionados no estan permitidos o solo puedes llebar la cantidad mencionada.";
+			close2;
+			warp "SavePoint",0,0;
+		}
+		sleep2 ( .Seconds * 1000 );
+	}
+end;
+
+function	LimitItems	{
+switch( getarg(0) ){
+	// Case <zone>: return CheckItems( <Item>,<Amount>,<Item>,<Amount>,.....,<Item>,<Amount> );
+	Case 0:	return CheckItems( 1187,0,1281,0,1282,0,1310,0,1382,0,1426,0,1486,0,1546,0,1576,0,1577,0,1640,0,1641,0,1743,0,1826,0,1827,0,1927,0,1981,0,2002,0,13042,0,13110,0,13176,0,13177,0 );
+	Case 1:	return CheckItems( 4049,2 );
+	Case 2:	return CheckItems( 607,2,608,3,4002,1 );
+	Case 3:	return CheckItems( 607,5,608,1,4002,1,5022,1 );
+	Case 4:	return CheckItems( 607,9999 );
+	Case 5: return CheckItems( 607,9999 );
+	Case 6: return CheckItems( 607,9999 );
+	default:
+		debugmes "[NPC : "+strnpcinfo(0)+"] - Zona invalida : "+getarg(0);
+		break;
+}
+return;
+}
+
+function	CheckItems	{
+for( set .@i,0; getarg( .@i,0 ); set .@i,.@i + 2 )
+	if( isequippedcnt( getarg( .@i ) ) > getarg( .@i + 1 ) || countitem( getarg( .@i ) ) > getarg( .@i + 1 ) ){
+		set .@Limit,.@Limit + ( ( !isequippedcnt( getarg( .@i ) ) )? countitem( getarg(.@i) ):isequippedcnt( getarg( .@i ) ) );
+		mes "[ ^FF0000"+( ( !getarg( .@i + 1 ) )?"OFF":"Max : ^0055FF"+getarg(.@i+1)+"ea" )+"^000000 ] "+getitemname( getarg(.@i) );
+	}
+return .@Limit;
+}
+
+}

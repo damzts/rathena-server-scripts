@@ -1,0 +1,105 @@
+prontera,264,354,6	script	Dexterity Set	786,{
+	mes "[Dexterity Set]";
+	if(BerzQuest == 1) goto L_Already;
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... Sabias q la persona que esta en esta tumba, era un cazador muy habil y en unos de sus viajes cazo un animal el cual al morir le dropeo un hat y alas de destreza ...";
+	next;
+ menu "^E9967AValkyrie Dex Hat^000000",-,"^E9967AFairy Dex Wings^000000",M_2,"Leave",M_EXIT;
+
+ mes "[Dexterity Set]";
+ mes "Oh!.. Es una exelente opcion, elejiste el ^E9967AValkyrie Dex Hat^000000";
+ emotion e_rock;
+ next;
+ mes "[Dexterity Set]";
+ mes "Para poder obtener el ^E9967AValkyrie Dex Hat^000000. Es nesario reunir estos Implementos:";
+
+ mes "^E9967A3^000000  Ulle's Cap [1]";
+ mes "^E9967A20^000000  Apple of Archer";
+ mes "^E9967A5^000000  Binoculars";
+ mes "^E9967A20^000000  Drops Card";
+ mes "^E9967A20^000000  Violet Dyestuffs";
+ mes "^E9967A1^000000  Valkyrie Helm [1]";
+ mes "^E9967A60^000000    Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A60,000,000^000000 Zenys";
+ next;
+ mes "[Dexterity Set]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+  mes "[Dexterity Set]";
+  mes "Dame los items, para poder entregarte tu Valkyrie Dex Hat... dejame revisar...";
+  next;
+  mes "[Dexterity Set]";
+ if(countitem(5123) < 3 || countitem(2285) < 20 || countitem(2296) < 5 || countitem(4004) < 20 || countitem(981) < 20 || countitem(5171) < 1 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 60000000) goto L_noItems;
+
+  		delitem 5123, 3;
+  		delitem 2285, 20;
+  		delitem 2296, 5;
+  		delitem 4004, 20;
+  		delitem 981, 20;
+  		delitem 5171, 1;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 60000000;
+  		getitem 20229, 1;
+
+ mes "Aca tengo tu Hat, disfruta ahora de tu ^E9967AValkyrie Dex Hat^000000 !";
+emotion e_grat;
+ close;
+
+M_2:
+ mes "[Dexterity Set]";
+ mes "Oh!.. Grandiosa eleccion las ^E9967AFairy Dex Wings^000000";
+ emotion e_rock;
+ next;
+ mes "[Dexterity Set]";
+ mes "Para poder obtener las ^E9967AFairy Dex Wings^000000. Es nesario que me traigas estos materiales:";
+ mes "^E9967A10^000000   Gloves [1]";
+ mes "^E9967A10^000000   Orleans Glove";
+ mes "^E9967A20^000000   Zerom Card";
+ mes "^E9967A3^000000   Staff Of Bordeaux";
+ mes "^E9967A1^000000   Alas De Sangre";
+ mes "^E9967A20^000000   Violet Dyestuffs";
+ mes "^E9967A60^000000     Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A80,000,000^000000 Zenys";
+ next;
+ mes "[Dexterity Set]";
+ mes "Tienes todo lo que te pedi?";
+ next;
+ menu "Si claro.",-,"Nop, ahora no!.",M_EXIT;
+ 
+  mes "[Dexterity Set]";
+  mes "Dame los items, para poder entregarte tus Fairy Dex Wings... dejame revisar...";
+  next;
+  mes "[Dexterity Set]";
+
+ if(countitem(2624) < 10 || countitem(2701) < 10 || countitem(4064) < 20 ||  countitem(1648) < 3 || countitem(27004) < 1 || countitem(981) < 20 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 80000000) goto L_noItems;
+
+  		delitem 2624, 10;
+  		delitem 2701, 10;
+  		delitem 4064, 20;
+  		delitem 1648, 3;
+  		delitem 27004, 1;
+  		delitem 981, 20;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 80000000;
+  		getitem 20224, 1;
+
+ mes "Genial, aca tengo tus Wings, disfrutalas y dales un buen uso a las ^E9967AFairy Dex Wings^000000 !";
+emotion e_grat;
+ close;
+
+L_noItems:
+ mes "Creo que aun te faltan algunas cosas vuelve cuando tengas todo...";
+ emotion e_sry;
+ close;
+
+M_EXIT:
+ mes "[Dexterity Set]";
+ mes "Bueno, si cambias de opinion aqui estare...";
+ emotion e_hmm;
+ close;
+}

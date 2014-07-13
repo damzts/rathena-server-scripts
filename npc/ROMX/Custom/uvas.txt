@@ -1,0 +1,93 @@
+pay_fild04,25,170,0	script	Vendedor de Uvas	50,{
+if (#puntos == 1) {goto L_ya;}
+if (#puntos == 2){goto L_yaquest;}
+mes "Hola!, soy un vendedor de uvas.";
+next;
+mes "Las uvas sirven para recuperar energia magica.";
+next;
+mes "Tambien llamada SP";
+next;
+mes "Lo malo es que ya no tengo como conseguir mas";
+sleep2 600;
+mes "Se me han acabado las reservas";
+Emotion e_shy;
+next;
+mes "Las necesito para obtener las uvas de los porings verdes los cuales son venenosos";
+sleep2 500;
+mes "...";
+next;
+mes "Oye.. pero si eres un aventurero!";
+sleep2 500;
+mes "no me podrias ayudar a conseguir mas reservas?";
+sleep2 700;
+mes "Porfavor...";
+menu "Claro que si, que necesitas?",L_SI,"Nop.. no tengo tiempo.",L_NO;
+
+L_SI:
+mes "Vaya! Muchas gracias!!!";
+Emotion e_thx;
+next;
+mes "Te dare la lista de los objetos que necesito..";
+next;
+goto L_ITEMS;
+L_ITEMS:
+mes "1 Poporing Card";
+mes "1500 Green Herb";
+mes "50 Panacea";
+mes "2 Clip [1]";
+set #puntos,+1;
+close;
+
+L_NO:
+mes "Mmm bien.. vuelve cuando tengas tiempo.";
+close; 
+
+L_ya:
+mes "Como vas con los items?";
+	if(countitem(4033)<1)goto falta;
+	if(countitem(511)<1500)goto falta;
+	if(countitem(525)<50)goto falta;
+	if(countitem(2607)<2)goto falta;
+next;
+sleep2 1400;
+mes "Genial!! ya podre venderte uvas!";
+sleep2 800;
+delitem 4033,1;
+delitem 511,1500;
+delitem 525,50;
+delitem 2607,2;
+Emotion e_thx;
+mes "Muchas gracias " + strcharinfo(0) + "! ";
+set #puntos,2;
+close;
+
+falta:
+sleep2 1000;
+Emotion e_hmm;
+mes "Parece que te faltan items..";
+sleep2 1000;
+mes "Te dare la lista de nuevo";
+goto L_ITEMS;
+
+L_yaquest:
+mes "Hola! " + strcharinfo(0) + "!";
+next;
+mes "Necesitas Uvas?";
+mes "Solo te costaran 275z cada una";
+next;
+mes "Pideme las que quieras tengo miles!!!";
+next;
+input .numuvas;
+if(.numuvas<=0) { mes "Jeje.."; sleep2 600; mes "Que bromista eres.."; sleep2 600; mes "Enserio.."; close; end;}
+mes "Muy bien!";
+mes "Eso seria.. "+(.numuvas*275)+"z.";
+next;
+if (!checkweight(514,.numuvas)) { mes "Espera.. no puedes cargar tantas uvas, necesitas al menos "+(.numuvas*2)+" de espacio para cargar esa cantidad."; close;}
+mes "Espera...";
+if (Zeny < .numuvas*275) { mes "No tienes suficiente zeny.."; close; }
+sleep2 800; next;
+mes "Toma..";
+getitem 514,.numuvas;
+Set Zeny, Zeny-(.numuvas*275);
+close;
+}

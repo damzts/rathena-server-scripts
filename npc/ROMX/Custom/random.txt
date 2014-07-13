@@ -1,0 +1,82 @@
+-	script	BLVLDOWN	-1,{
+OnPCLoginEvent:
+if (BaseLevel > 190 && #YATERESETE == 0){
+atcommand "@storeall";
+dispbottom "Ya te resetee =)";
+dispbottom "Todos tus objetos estan en el storage";
+BaseLevel = 190;
+resetstatus;
+resetskill;
+#YATERESETE = 1;
+} else #YATERESETE = 1; end;
+}
+
+prontera,150,150,5	script	RESET	909,{ if (getgroupid() < 100) { dispbottom "Nope.";end;}
+	setarray .Castles$[0],
+		"prtg_cas01","prtg_cas02","prtg_cas03","prtg_cas04","prtg_cas05",
+		"payg_cas01","payg_cas02","payg_cas03","payg_cas04","payg_cas05",
+		"gefg_cas01","gefg_cas02","gefg_cas03","gefg_cas04","gefg_cas05",
+		"aldeg_cas01","aldeg_cas02","aldeg_cas03","aldeg_cas04","aldeg_cas05",
+		"arug_cas01","arug_cas02","arug_cas03","arug_cas04","arug_cas05",
+		"schg_cas01","schg_cas02","schg_cas03","schg_cas04","schg_cas05";
+		
+		while(.@i < getarraysize(.Castles$)){setcastledata .Castles$[.@i],1,0; .@i++;}
+
+}
+
+// schg_cas05	mapflag	gvg_castle
+prontera,163,178,3	shop	Basicos	894,713:30,611:40,601:60,602:300,645:800,656:1500,657:3000,506:40,11502:8000,533:1200,501:50,502:200,503:550,504:1200,1750:1,1751:3,1754:3,1752:3,13200:1,13201:15,13252:20,13251:10,13253:40,13250:4,13256:10,13259:10,13258:10,13257:10,13255:10
+aldebaran,146,113,3	duplicate(Basicos)	Basicos1	894
+
+-	script	Killer	-1,{
+OnNPCKillEvent:
+set .@mob_pce,rand(0,100);
+if (.@mob_pce < 7) dispbottom "Cerca de obtener poring coin: "+.@mob_pce;
+if (.@mob_pce < 2 && (BaseJob == Job_Wizard || BaseJob == Job_Crusader || BaseJob == Job_Priest || BaseJob == Job_Rogue || BaseJob == Job_Gunslinger)) getitem 7539,1; else if (.@mob_pce < 6) getitem 7539,1; end;
+}
+
+prontera	mapflag	novending
+
+
+//Acesorios
+// quiz_02,227,369,4	shop	Accesorios	726,2601:-1,2621:-1,2602:-1,2622:-1,2603:-1,2604:-1,2624:-1,2605:-1,2625:-1,2607:-1,2608:-1,2609:-1,2612:-1,2613:-1,2615:-1,2636:-1,2637:-1,2640:-1,2647:-1,2652:-1,2653:-1,2654:-1,2655:-1,2657:-1,2658:-1
+
+//Arcos
+quiz_02,237,388,4	shop	Arcos	732,1702:-1,1704:-1,1708:-1,1718:-1,1711:-1,1713:-1,1714:-1
+
+//Armaduras
+quiz_02,230,388,4	shop	Armaduras	848,2306:-1,2315:-1,2337:-1,2339:-1,2356:-1,2355:-1,2310:-1,2302:-1,2320:-1,2317:-1,2327:-1,2304:-1,2341:-1,2340:-1,2313:-1,2326:-1,2321:-1,2324:-1,2333:-1,2331:-1,2329:-1
+
+//Capas
+quiz_02,227,380,4	shop	Capas	834,2504:-1,2505:-1,2508:-1,2512:-1,2513:-1,2514:-1,2516:-1,2521:-1,2522:-1,2525:-1,2526:-1
+
+//Dagas
+quiz_02,227,374,4	shop	Dagas	947,1202:-1,1205:-1,1207:-1,1211:-1,1214:-1,1217:-1,1220:-1,1226:-1,1237:200000
+
+//Espadas
+quiz_02,266,388,4	shop	Espadas	953,1102:-1,1105:-1,1108:-1,1111:-1,1114:-1,1120:-1,1124:-1,1125:-1,1127:-1,1128:-1,1129:-1,1134:100000,1116:-1,1152:-1,1155:-1,1158:-1,1162:-1,1167:100000,1168:100000
+
+//Hachas
+quiz_02,271,382,4	shop	Hachas	736,1302:-1,1304:-1,1305:-1,1352:-1,1355:-1,1358:-1,1361:-1
+
+//Instrumentos
+quiz_02,272,377,4	shop	Instrumentos	790,1902:-1,1904:-1,1906:-1,1908:-1,1910:-1,1912:-1,1913:150000,1914:400000
+
+//Katares
+quiz_02,273,369,4	shop	Katar	884,1256:15000000,1258:15000000,1255:-1,1251:-1,1253:-1,1262:8000000,1264:15000000
+
+//Latigos
+quiz_02,257,388,4	shop	Latigos	817,1951:-1,1953:-1,1955:-1,1959:-1,1961:-1,1962:-1,1963:-1,1964:-1
+
+//Libros
+quiz_02,243,388,4	shop	Libros	833,1550:-1,1551:-1,1552:-1,1558:-1
+
+//Mazos
+quiz_02,246,384,4	shop	Mazos	813,1502:-1,1505:-1,1509:-1,1512:-1,1515:-1,1517:-1,1521:-1,1522:-1,1523:25000,1524:30000,1525:20000,1526:20000,1531:20000
+
+//Rod
+quiz_02,252,384,4	shop	Rod	485,1602:-1,1605:-1,1608:-1,1611:-1,1613:30000,1614:30000,1615:250000,1622:40000
+
+//Shoes
+quiz_02,249,382,4	shop	Shoes	870,2401:-1,2403:-1,2405:-1,2407:-1,2411:-1,2416:50000,2417:7000000,2418:7000000
+

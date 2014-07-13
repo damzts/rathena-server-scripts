@@ -1,0 +1,128 @@
+-	script	Sobrevicencias	-1,{
+OnWhisperGlobal:
+if (groupid()<3) end;
+OnClock2030:
+	announce " El z_agit de sobrevivencia ha comenzado, si quieres participar ve a Payon para ser teletrasnportado al lugar del z_agit",0;
+	enablenpc "warpsobrevivencia";
+	disablenpc "Sobrevicencias";
+	sleep2 10000;
+	announce "Sobreviviente: Para acceder a el z_agit vayan a la Ciudad de Payon y entren en el Portal.",0;
+	sleep2 10000;
+	announce "Sobreviviente: Despues de 1 minuto el portal se cerrara.",0;
+	sleep2 10000;
+	announce "Sobreviviente: Recuerden vayan a el centro de Izlude y entren a el portal los que quieran participar.",0;
+	initnpctimer;
+	end;
+
+OnTimer30000:
+	announce "Sobreviviente: Faltan 30 segundos.",0;
+sleep2 5000;
+	announce "Sobreviviente: Si quieres participar porfavor entra en el warp portal que esta en Izlude. z_agit de Sobrevivencia trae a tu job mas fuerte!!!!.",0;
+	end;
+
+OnTimer50000:
+	announce "Sobreviviente: Faltan 10 segundos.",0;
+	end;
+ 
+OnTimer55000:
+	announce "Sobreviviente: 5.",0;
+	end;
+
+OnTimer56000:
+	announce "Sobreviviente: 4.",0;
+	end;
+
+OnTimer57000:
+	announce "Sobreviviente: 3.",0;
+	end;
+
+OnTimer58000:
+	announce "Sobreviviente: 2.",0;
+	end;
+   
+OnTimer59000:
+    announce "Sobreviviente: 1.",0;
+    end;
+   
+OnTimer60000:
+    announce "Sobreviviente: Tiempo Terminado.",0;
+    end;
+   
+OnTimer61000:
+	disablenpc "warpsobrevivencia";
+	donpcevent "Sobreviviente::OnEnable";
+	stopnpctimer;
+	end;
+
+}
+//--------------------------------------------------
+
+if (BaseLevel > 99) goto L_No;
+L_No:
+mes "[^0000FFSobreviviente^000000]";
+mes "D=<";
+mes "^696969Tu no tienes el lvl permitido para entrar!^000000";
+close;
+}
+
+//--------------------------------------------------
+   
+
+payon.gat,169,92,0	warp	warpsobrevivencia	2,2,z_agit,0,0
+   
+//--------------------------------------------------
+
+
+z_agit,49,49,6	script	Sobreviviente	871,{
+
+//--------------------------------------------------
+
+	mes "[Sobreviviente]";
+	mes "Felicidades eres el unico que queda en el mapa, por consiguiente eres el ganador";
+	close2;
+	announce "Sobreviviente: Tenemos un ganador, se acaba de ganar unos 60 Poring Coins. Por favor ven al centro del mapa para darte tu premio",0;
+	getitem 7539,60;
+	pvpoff "z_agit";
+	warp "prontera",155,182;
+	hideonnpc "Sobreviviente";
+	end;
+
+OnEnable:
+	mapannounce "z_agit","Ok preparense que solo habrá premio para el que quede de pie",0;
+	sleep2 10000;
+	mapannounce "z_agit","Se les recuerda que no se permiten curas, así que quien vino con curas, vayasé despidiendo que no durará mucho n_n",0;
+	sleep2 10000;
+	mapannounce "z_agit","Sobreviviente: OK OK OK es hora de jugar....!!!!!!!",0;
+	sleep2 10000;
+	pvpon "z_agit";
+	goto L_Start;
+	end;
+   
+L_Start:
+    if(getmapusers("z_agit") == 1) goto L_Champ;
+    if(getmapusers("z_agit") == 0) goto Loser;
+    if(getmapusers("z_agit") > 1) {
+    announce "Sobreviviente: . . . . .",0;
+    sleep2 10000;
+	announce "Sobreviviente: Uhmmm.... Aún existen usuarios en el mapa peleando por ser el más fuerte!!!!!",0;
+       	sleep2 10000;
+	announce "Sobreviviente: Uhmmm.... Aún existen usuarios en el mapa peleando por ser el más fuerte!!!!!",0;
+       	sleep2 10000;
+	announce "Sobreviviente: Uhmmm.... Aún existen usuarios en el mapa peleando por ser el más fuerte!!!!!",0;
+    		sleep2 10000;
+	goto L_Start;
+}
+L_Champ:
+	announce "Tenemos un ganador en el z_agit de Sobrevivencia! Ven al centro del mpa y recoge tu premio",0;
+	enablenpc "Sobreviviente";
+	end;
+
+Loser:
+	mes "Lamento informarles que nadie quedó de pie increíble pero cierto jajaj suerte para la próxima a todos";
+	pvpoff "z_agit";
+	end;
+	close;
+	end;
+}
+
+

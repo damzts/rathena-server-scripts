@@ -1,0 +1,65 @@
+//===== eAthena Script =======================================
+//= Reset NPC for Athena by Script & DB Team
+//===== By: ================================================== 
+//= eAthena Team
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= Any eAthena Version
+//===== Description: ========================================= 
+//= Resets skills, stats, or both.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version
+//= 1.1 Optimized for the greater good. [Kisuka]
+//============================================================ 
+
+-	script	HourlyAnnounce	-1,{
+OnWhisperGlobal:
+OnInit: setarray .Messages$[0],"Cualquier bug reportalo en el foro! ","Diviertete y no olvides invitar a tus amigos ^^","Recuerda comportarte como es debido, un mal comportamiento te puede llebar a un baneo!"; end;
+OnMinute10: announce .Messages$[rand(getarraysize(.Messages$))],0; end;
+}
+
+prontera,159,183,4	script	Reseteos	93,{
+	mes "[Reseteos]";
+	mes "Yo puedo resetear tu estado.";
+	mes "Stats: "+(5000*BaseLevel)+"z (5k x Lvl)";
+	mes "Skills: "+(5000*BaseLevel)+"z (5k x Lvl)";
+	mes "Ambos: "+(7000*BaseLevel)+"z (7k x Lvl)";
+	mes "Selecciona el servicio que quieres:";
+	next;
+	switch(select("^FF3355Resetear Skills:Resetear Stats:Reset los dos^000000:Salir")) {
+		case 1:
+			mes "[Reseteos]";
+			if (Zeny < 5000*BaseLevel) {
+				mes "Lo siento, no tienes suficiente zeny.";
+				close;
+			}
+			mes "Muy bien, aqui vamos.. Recuerda, algunos cambios no tomaran efecto hasta que relogees al juego!";
+			set Zeny,zeny-5000*BaseLevel;
+			ResetSkill;
+			close;
+		case 2:
+			mes "[Reseteos]";
+			if (Zeny < 5000*BaseLevel) {
+				mes "Lo siento, no tienes suficiente zeny.";
+				close;
+			}
+			mes "Muy bien, aqui vamos.. Recuerda, algunos cambios no tomaran efecto hasta que relogees al juego!";
+			set Zeny,zeny-5000*BaseLevel;
+			ResetStatus;
+			close;
+		case 3:
+			mes "[Reseteos]";
+			if (Zeny < 7000*BaseLevel) {
+				mes "Lo siento, no tienes suficiente zeny.";
+				close;
+			}
+			mes "Muy bien, aqui vamos.. Recuerda, algunos cambios no tomaran efecto hasta que relogees al juego!";
+			set Zeny,zeny-7000*BaseLevel;
+			ResetSkill;
+			ResetStatus;
+			close;
+		case 4:
+			close;
+	}
+}

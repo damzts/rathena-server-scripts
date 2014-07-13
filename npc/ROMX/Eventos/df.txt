@@ -1,0 +1,234 @@
+
+-	script	final_dest	-1,{
+OnWhisperGlobal:
+OnClock0105:
+OnClock0600:
+OnClock0900:
+OnClock1200:
+OnClock1500:
+OnClock1800:
+OnClock2100:// Edit this to what ever you want. note : OnClock0000 is 12 midnight and OnClock1200 is 12 Noon
+goto startfinal_destevent;
+
+startfinal_destevent:
+sleep 500;
+set $eventtypes48,rand(1,4);
+sleep 500;
+if ($eventtypes48 == 1){announce "Atelier S-48: El evento Destinacion Final esta apunto de comenzar. [Nivel 75 ~ 99]",0;}
+if ($eventtypes48 == 2){announce "Atelier S-48: El evento Destinacion Final esta apunto de comenzar. [Nivel 100 ~ 150]",0;}
+if ($eventtypes48 == 3){announce "Atelier S-48: El evento Destinacion Final esta apunto de comenzar. [Nivel 151 ~ 200]",0;}
+if ($eventtypes48 == 4){announce "Atelier S-48: El evento Destinacion Final esta apunto de comenzar. [Nivel 200 ~ 255]",0;}
+sleep2 10000;
+announce "Atelier S-48: Quien quiera jugar, porfavor vaya a registrarse en Prontera.",0;
+sleep2 10000;
+announce "Atelier S-48: Despues de 1 minuto las registraciones estaran cerradas.",0;
+sleep2 10000;
+announce "Atelier S-48: Porfavor vayan a Prontera y registrense ahora si quieren unirse al evento.",0;
+enablenpc "Destinacion Final";
+initnpctimer;
+end;
+
+OnTimer30000:
+announce "Atelier S-48: Ultimos 30 segundos.",0;
+sleep2 5000;
+announce "Atelier S-48: Si quieres unirte registrate en Prontera.",0;
+end;
+
+OnTimer50000:
+announce "Atelier S-48: Ultimos 10 segundos.",0;
+end;
+
+OnTimer55000:
+announce "Atelier S-48: 5.",0;
+end;
+
+OnTimer56000:
+announce "Atelier S-48: 4.",0;
+end;
+
+OnTimer57000:
+announce "Atelier S-48: 3.",0;
+end;
+
+OnTimer58000:
+announce "Atelier S-48: 2.",0;
+end;
+
+OnTimer59000:
+announce "Atelier S-48: 1.",0;
+end;
+
+OnTimer60000:
+announce "Atelier S-48: Se acabo el tiempo.",0;
+end;
+
+OnTimer61000:
+disablenpc "Destinacion Final";
+donpcevent "Entrega de Premios::OnEnable";
+stopnpctimer;
+end;
+}
+//---------All Job Registration---------------
+prontera,155,178,5	script	Destinacion Final	106,{
+
+mes "[Atelier S-48]";
+mes "Hola! que puedo hacer por ti?";
+next;
+menu "Registrarse",-,"Que es Destinacion Final?",what,"Salir",leave;
+next;
+mes "[Atelier S-48]";
+if ($eventtypes48 == 1){
+if (BaseLevel < 75  || BaseLevel > 99 ){mes "Lo siento, no puedes participar.. No eres del nivel requerido. - [Nivel 75 ~ 99]";close;}}
+if ($eventtypes48 == 2){if (BaseLevel < 100  || BaseLevel > 150 ){mes "Lo siento, no puedes participar.. No eres del nivel requerido. - [Nivel 100 ~ 150]";close;}}
+if ($eventtypes48 == 3){if (BaseLevel < 151  || BaseLevel > 200 ){mes "Lo siento, no puedes participar.. No eres del nivel requerido. - [Nivel 151 ~ 200]";close;}}
+if ($eventtypes48 == 4){if (BaseLevel < 200  || BaseLevel > 255 ){mes "Lo siento, no puedes participar.. No eres del nivel requerido. - [Nivel 200 ~ 255]";close;}}
+mes "Gracias por registrarte " + strcharinfo(0) + ", Que te diviertas!";
+warp "final_dest",0,0;
+end;
+what:
+mes "[Atelier S-48]";
+mes "Destinacion Final es un evento PvP";
+next;
+mes "[Atelier S-48]";
+mes "La unica diferencia.";
+mes "Es que ganaras algunos wPoints y premios si eres el ultimo jugador viviente.";
+next;
+mes "[Atelier S-48]";
+mes "Eso es todo";
+close;
+leave:
+mes "[Atelier S-48]";
+mes "Espero que te registres en el evento que sigue!";
+close;
+
+
+}
+
+//--------------------------
+
+//--------------------------
+final_dest,100,22,6	script	Entrega de Premios	811,{
+
+mes "[Entrega de Premios]";
+mes "Felicidades!, ganaste.";
+next;
+announce "Atelier S-48: Tenemos un ganador! bien hecho ["+strcharinfo(0)+"].",0;
+getitem 13813,2;
+getitem 607,10;
+getitem 673.1;
+set ; // Change This item id to what ever you want . item id,amount
+dispbottom "+50 Cashpoints ahora tienes "+#CASHPOINTS+" Cashpoints";
+mes "Regresaras ahora.";
+sleep2 1500;
+warp "prontera",155,182;
+disablenpc "Entrega de Premios";
+close;
+end;
+OnEnable:
+pvpoff "final_dest";
+mapannounce "final_dest","Atelier S-48: El evento comenzara en breve",0;
+sleep2 10000;                           
+mapannounce "final_dest","Atelier S-48: Pero antes de que comenzemos les dare algunos recordatorios..",0;
+sleep2 10000;                           
+mapannounce "final_dest","Atelier S-48: Usar Cloaking , Hiding esta estrictamente prohibido..",0;
+sleep2 10000;
+mapannounce "final_dest","Atelier S-48: Solo el ultimo jugador de pie ganara este evento!!",0;
+sleep2 10000;
+mapannounce "final_dest","Atelier S-48: Que estamos esperando?.. Preparense para matar!!...",0;
+sleep2 10000;
+goto L_Start;
+end;
+L_Start:
+if(getmapusers("final_dest") == 1) goto L_Champ;
+if(getmapusers("final_dest") == 0) goto L_None;
+if(getmapusers("final_dest") > 1) {
+mapannounce "final_dest","Atelier S-48: Ponganse listos a la cuenta de 5 comenzaremos!....",0;
+sleep2 10000;
+mapannounce "final_dest","Atelier S-48: 5",0;
+sleep2 5000;
+mapannounce "final_dest","Atelier S-48: 4",0;
+sleep2 4000;
+mapannounce "final_dest","Atelier S-48: 3",0;
+sleep2 3000;
+mapannounce "final_dest","Atelier S-48: 2",0;
+sleep2 2000;
+mapannounce "final_dest","Atelier S-48: 1",0;
+sleep2 1000;
+pvpon "final_dest";
+goto timer;
+end;
+}
+timer:
+initnpctimer;
+end;
+
+OnTimer1000:
+end;
+
+OnTimer1100:
+if(getmapusers("final_dest") == 1) goto L_Champ;
+if(getmapusers("final_dest") > 2) goto timer;
+if(getmapusers("final_dest") == 2) goto champ;
+stopnpctimer;
+end;
+
+champ:
+announce "Atelier S-48: Quedan 2 guerreros vivos en el evento Destinacion Final!",0;
+sleep2 60000;
+if(getmapusers("final_dest") == 1) goto L_Champ;
+if(getmapusers("final_dest") > 1) goto timer;
+end;
+
+L_Champ:
+mapannounce "final_dest","Entrega de Premios: Porfavor hablame para obtener tu premio..",2500000;
+pvpoff "final_dest";
+enablenpc "Entrega de Premios";
+end;
+
+L_None:
+disablenpc "Entrega de Premios";
+pvpoff "final_dest";
+end;
+}
+//----- Die = warp prt -----
+-	script	Killa_warp	-1,{
+
+OnPCDieEvent:
+	getmapxy(.@map$,.@x,.@y,0);
+	if(.@map$=="final_dest")
+	{
+		set #kill_point, 0;
+		announce "["+strcharinfo(0)+"] murio, queda fuera del evento!.",bc_all;
+		warp "prontera",0,0;
+		end;
+	}
+OnPCKillEvent:
+	getmapxy(.@map$,.@x,.@y,0);
+	if(.@map$=="final_dest")
+	{
+	set #kill_point,#kill_point+1;
+	if ( #kill_point % 4 == 0) {
+	announce "["+strcharinfo(0)+"] ha matado 4 jugadores consecutivos! Obtendra un premio especial",bc_all;
+	getitem 607, 20;
+	end;
+	}
+	}
+}
+
+-	script	final_dest#disable	-1,{
+
+OnInit:
+disablenpc "Entrega de Premios";
+disablenpc "Destinacion Final";
+end;
+}
+
+// == Mapflags
+final_dest	mapflag	nowarp
+final_dest	mapflag	nowarpto
+final_dest	mapflag	noteleport
+final_dest	mapflag	nosave
+final_dest	mapflag	nomemo
+final_dest	mapflag	nobranch
+final_dest	mapflag	pvp_noparty
+final_dest	mapflag	restricted	1

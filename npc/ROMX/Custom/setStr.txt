@@ -1,0 +1,104 @@
+prontera,276,343,6	script	Strong Set	796,{
+	mes "[Strong Set]";
+	if(BerzQuest == 1) goto L_Already;
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... Bueno yo soy el Guardian de esta tumba, y el difunto me dejo unos items especiales que te pueden ser muy utiles...";
+	next;
+ menu "^E9967AValkyrie Str Hat^000000",-,"^E9967AFairy Str Wings^000000",M_2,"Leave",M_EXIT;
+
+ mes "[Strong Set]";
+ mes "Oh!.. Veo que te interesa este Set, elejiste el ^E9967AValkyrie Str Hat^000000";
+ emotion e_rock;
+ next;
+ mes "[Strong Set]";
+ mes "Para poder crear el ^E9967AValkyrie Str Hat^000000. Es nesario que me reunas estos Implementos:";
+
+ mes "^E9967A3^000000  Bone Head [1]";
+ mes "^E9967A20^000000  Magni's Cap";
+ mes "^E9967A3^000000  Majestic Goat [0]";
+ mes "^E9967A20^000000  Vanberk Card";
+ mes "^E9967A200^000000  Harpy Feather";
+ mes "^E9967A20^000000  Black Dyestuffs";
+ mes "^E9967A1^000000    Valkyrie Helm [1]";
+ mes "^E9967A60^000000      Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A60,000,000^000000 Zenys";
+ next;
+ mes "[Strong Set]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+  mes "[Strong Set]";
+  mes "Dame los items, para poder crear tu Valkyrie Str Hat... mmm dejame revisar...";
+  next;
+  mes "[Strong Set]";
+ if(countitem(5398) < 3 || countitem(5122) < 20 || countitem(2256) < 3 || countitem(4411) < 20 || countitem(983) < 20 || countitem(5171) < 1 || countitem(26021) < 60 || countitem(7539) < 600 ||Zeny < 60000000) goto L_noItems;
+
+  		delitem 5398, 3;
+  		delitem 5122, 20;
+  		delitem 2256, 3;
+  		delitem 4411, 20;
+  		delitem 983, 20;
+  		delitem 5171, 1;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 60000000;
+  		getitem 20228, 1;
+
+ mes "Genial tu Hat ha sido terminado, disfruta ahora de tu ^E9967AValkyrie Str Hat^000000 !";
+emotion e_grat;
+ close;
+
+M_2:
+ mes "[Strong Set]";
+ mes "Oh!.. Excelente eleccion las ^E9967AFairy Str Wings^000000";
+ emotion e_rock;
+ next;
+ mes "[Strong Set]";
+ mes "Para poder crear las ^E9967AFairy Str Wings^000000. Es nesario reunir estos materiales:";
+ mes "^E9967A20^000000   Matis Card";
+ mes "^E9967A10^000000   Ring [1]";
+ mes "^E9967A3^000000   Doom Slayer [1]";
+ mes "^E9967A20^000000   Black Dyestuffs";
+ mes "^E9967A1^000000   Alas de Sangre";
+ mes "^E9967A60^000000     Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A80,000,000^000000 Zenys";
+ next;
+ mes "[Strong Set]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, ahora no!.",M_EXIT;
+ 
+  mes "[Strong Set]";
+  mes "Dame los items, para poder crear tus Fairy Str Wings... dejame revisar...";
+  next;
+  mes "[Strong Set]";
+
+ if(countitem(4079) < 20 || countitem(2621) < 10 || countitem(1371) < 3 ||  countitem(983) < 20 || countitem(27004) < 1 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 80000000) goto L_noItems;
+
+  		delitem 4079, 20;
+  		delitem 2621, 10;
+  		delitem 1371, 3;
+  		delitem 983, 20;
+  		delitem 27004, 1;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 80000000;
+  		getitem 20225, 1;
+
+ mes "Genial tus Wings han sido creadas, disfruta ahora de tus ^E9967AFairy Str Wings^000000 !";
+emotion e_grat;
+ close;
+
+L_noItems:
+ mes "Creo que aun te faltan algunas cosas vuelve cuando tengas todo...";
+ emotion e_sry;
+ close;
+
+M_EXIT:
+ mes "[Strong Set]";
+ mes "Bueno, si TIENES el VALOR para ser parte de este reto, aqui estare...";
+ emotion e_hmm;
+ close;
+}

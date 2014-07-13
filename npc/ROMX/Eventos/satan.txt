@@ -1,0 +1,213 @@
+//Made by Karul
+//==========Start/Announcer NPC
+quiz_02,323,234,3	script	Satan Catcher Event	793,{
+
+set .@name$,"^9932CC[Satan Catcher] ^000000";
+
+if(getgmlevel() < 3) { 
+	mes .@name$;
+	mes "Lo siento, no eres GM.";
+	close;
+	} else {
+	L_Main:
+	mes .@name$;
+	mes "Que es lo que quieres hacer?";
+	switch(select("Item [" + getitemname($SatanReward)  + "]:Comenzar evento")) {
+			case 1: next;
+					mes .@name$;
+					mes "Que objeto quieres como recompensa?";
+					input $SatanReward;
+					next;
+					mes .@name$;
+					mes "Cuantos quieres dar?";
+					input $SatanRewardItems;
+					next;
+					mes .@name$;
+					mes "Esta es tu cantidad:";
+					mes ""+$SatanRewardItems+"";
+					next;
+					goto L_Main;
+			case 2: next;
+					mes .@name$;
+					mes "Comenzando evento...";
+					close2;
+					Announce "El evento atrapa a Poporing ha comenzado! (pedian originalidad?)",bc_all;
+					sleep 5000;
+					Announce "El portal aparecio en prontera!",bc_all;
+					enablenpc "satanevent";
+					initnpctimer;
+					end;
+					
+					OnTimer30000:
+							Announce "Han pasado 30 segundos!",bc_all;
+							sleep 5000;
+							Announce "Corre a prontera si quieres asistir!",bc_all;
+							end;
+							
+					OnTimer40000:
+							Announce "Quedan veinte segundos!",bc_all;
+							end;
+							
+					OnTimer50000:
+							Announce "Diez segundos!",bc_all;
+							end;
+							
+					OnTimer55000:
+							Announce "5!",bc_all;
+							sleep 1000;
+							Announce "4!",bc_all;
+							sleep 1000;
+							Announce "3!",bc_all;
+							sleep 1000;
+							Announce "2!",bc_all;
+							sleep 1000;
+							Announce "1!",bc_all;
+							sleep 1000;
+							Announce "0!",bc_all;
+							sleep 1000;
+							disablenpc "satanevent";
+							donpcevent "Rewarder::OnEnable";
+							stopnpctimer;
+							end;
+		}
+	}
+OnInit:
+        disablenpc "satanevent";
+        hideonnpc "Rewarder";
+}
+
+//=================Warp NPC
+prontera,155,180,0	warp	satanevent	1,1,poring_w01,102,113
+
+//=================Reward NPC
+poring_w01,100,127,5	script	Rewarder	793,{
+
+set .@sname$,"[Rewarder]";
+
+	mes .@sname$;
+	if(.@SATAN == 1) goto L_SATAN;
+	mes "Por favor dime tu nombre.";
+	next;
+	input .@charname$;
+	if(.@charname$ != strcharinfo(0)) {
+		mes .@name$;
+		mes "No mientas..";
+		close;
+	}
+	mes .@name$;
+	mes "Felicidades! Ganaste!";
+	Announce "Felicidades a " + .@charname$ + "! gano " + $SatanRewardItems + " " + getitemname($SatanReward)  + "(s)!",bc_all;
+	getitem $SatanReward,$SatanRewardItems;
+	atcommand "@go 0";
+	hideonnpc "Rewarder";
+	end;
+	
+L_SATAN:
+	mes .@sname$;
+	mes "Porfavor, dime tu nombre";
+	next;
+	input .@charname$;
+	if(.@charname$ != strcharinfo(0)) {
+		mes .@name$;
+		mes "No mientas..";
+		close;
+	}
+	mes .@name$;
+	mes "Felicidades! Ganaste!";
+	Announce "Felicidades a " + .@charname$ + "! gano " + $SatanRewardItems + " " + getitemname($SatanReward)  + "(s)!",bc_all;
+	getitem $SatanReward,$SatanRewardItems;
+	set SATAN,0;
+	atcommand "@go 0";
+	hideonnpc "Rewarder";
+	end;
+	
+OnEnable:
+	set .@aname$,"[Rewarder]";
+	
+	mapannounce "poring_w01","" + .@aname$ + ": Llamare a 100 diferentes Poporings.",16;
+	sleep 5000;
+	mapannounce "poring_w01","" + .@aname$ + ": Solo uno de ellos es el real.",16;
+	sleep 5000;
+	mapannounce "poring_w01","" + .@aname$ + ": El correcto se llamara 'Poporing'.",16;
+	sleep 5000;
+	mapannounce "poring_w01","" + .@aname$ + ": Si matas uno incorrecto, estas fuera. Si matas al correcto, ganas.",16;
+	sleep 5000;
+	mapannounce "poring_w01","" + .@aname$ + ": Es hora de comenzar!",16;
+	goto L_Start;
+	end;
+
+L_Start:
+	set .@aname$,"[Rewarder]";
+
+	mapannounce "poring_w01","" + .@aname$ + ": 5!",16;
+	sleep 1000;
+	mapannounce "poring_w01","" + .@aname$ + ": 4!",16;
+	sleep 1000;
+	mapannounce "poring_w01","" + .@aname$ + ": 3!",16;
+	sleep 1000;
+	mapannounce "poring_w01","" + .@aname$ + ": 2!",16;
+	sleep 1000;
+	mapannounce "poring_w01","" + .@aname$ + ": 1!",16;
+	sleep 1000;
+	mapannounce "poring_w01","" + .@aname$ + ": GO!",16;
+	sleep 1000;
+	areamonster "poring_w01",84,119,121,90,"Poporing",1031,1,"satanwin::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Pop45oring",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Pauringa",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Poringa",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Pussy",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"HAHA NOOB!",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Fuck You",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Don't Kill Me PLS",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Someone",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Satanic Morroc",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Satan Moroc",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Satan Morocc",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Satin Mrroc",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"I am Satan Morroc",1031,5,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Corrom Natas",1031,1,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"SaTaN MoRrOc",1031,1,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Sattan Morroc",1031,1,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Say Ten More Rocks",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Satan of the Morroc",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Morroc's Satan",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"S4t4n M0rr0c",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Saten Morroc",1031,10,"satanlose::OnMobKilled";
+	areamonster "poring_w01",84,119,121,90,"Stan Morrc",1031,1,"satanlose::OnMobKilled";
+	end;
+}
+
+//========Killed the right one
+-	script	satanwin	-1,{
+
+	set .@aname$,"[Rewarder]";
+
+OnMobKilled:
+	dispbottom "Satan Morroc: ASDFGHJKL; Me encontraste.";
+	set .@SATAN,1;
+	atcommand "@doommap";
+	killmonster "poring_w01","All";
+	mapannounce "poring_w01","" + .@aname$ + " Ven y dime tu nombre.",16;
+	hideoffnpc "Rewarder";
+	end;
+}
+
+//========Killed the wrong one
+-	script	satanlose	-1,{
+
+OnMobKilled:
+	dispbottom "Satan Morroc: ASDFGHJKL; No has encontrado a mi hermano!";
+	atcommand "@go 0";
+	end;
+}
+
+// -- Mapflags (If Wanted)
+poring_w01	mapflag	nowarp
+poring_w01	mapflag	nowarpto
+poring_w01	mapflag	noteleport
+poring_w01	mapflag	nosave
+poring_w01	mapflag	nomemo
+poring_w01	mapflag	nobranch
+poring_w01	mapflag	noloot
+poring_w01	mapflag	noskill
+poring_w01	mapflag	nopenalty
