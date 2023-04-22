@@ -1,0 +1,282 @@
+/*prontera,154,183,4	script	Prueba	942,{
+OnInit:	
+		defpattern 1,"([^:]+):.\\s*"+$MonsterName$+".*", "Palabra0";
+        activatepset 1;
+        end;
+Palabra0:
+	npctalk "Si, lo encontraste "+strcharinfo(0);
+	end;
+   
+*/}
+
+
+
+
+	,2	script	Disguise NPC::disguise		50,{
+if (!$guessbegin)
+{
+	mes "[Disguise NPC]";
+	mes "El evento Adivina el Monstruo va a comenzar pronto!";
+	close;
+}
+end;
+
+YOGANE:
+		setnpctimer 0;
+		deletepset 1;
+		set .DisguiseWon, 1;
+		set $DisguiseRound, $DisguiseRound + 1;
+		sleep2 3000;
+		npctalk strcharinfo(0) + " adivino mi nombre!";
+		sleep2 3000;
+		npctalk $MonsterName$ + " es la respuesta correcta.";
+		sleep2 3000;
+		npctalk "Toma tu recompensa, amigo.";
+		getitem 533,40;
+		
+		if ($DisguiseRound >= 6)
+			{
+				set $DisguiseRound, 0;
+				sleep 3000;
+				npctalk "Evento ha terminado!";
+				sleep 3500;
+				npctalk "Nos vemos la proxima!";
+				sleep 2000;
+				emotion 12;
+				sleep 1000;
+				mapwarp "quiz_00.gat","gonryun",158,112;
+				setnpcdisplay "disguise",50;
+				disablenpc "disguise";
+				end;
+			}
+		sleep 5000;
+		goto OnStart;
+		end;
+
+OnStart:
+	set $guessbegin, 1;
+	set .DisguiseWon, 0;
+	if (!$DisguiseRound)
+	{
+		npctalk "Está bien, entonces. Empecemos el evento!";
+		sleep 4000;
+		npctalk "Pero primero voy a explicar cómo jugar este juego.";
+		sleep 6000;
+		npctalk "Me voy a disfrazar en un monstruo al azar.";
+		sleep 5000;
+		npctalk "Tienes que adivinar el nombre del monstruo y decirlo.";
+		sleep 5000;
+		npctalk "No te preocupes por usar letras mayusculas u minusculas es igual.";
+		sleep 8000;
+		npctalk "Ok. Empecemos!";
+		sleep 5000;
+	}
+	else if ($DisguiseRound < 5)
+	{
+		npctalk "Preparénse para la siguiente ronda.";
+		setnpctimer 0;
+		sleep 8000;
+	}
+	else
+	{	
+		npctalk "Esta es la ultima ronda!";
+		sleep 2000;
+		npctalk "Prepárense.";
+		sleep 6000;
+	}
+	do
+	{
+		set $monster, rand(1001,1797);
+	}
+	while ($monster == 1003 || $monster == 1006 || $monster == 1017 || $monster == 1021 || $monster == 1022 || $monster == 1027 || $monster == 1043 || $monster == 1006 || $monster == 1136 || $monster == 1137 || $monster == 1168 || $monster == 1171 || $monster == 1172 || $monster == 1173 || $monster == 1181 || $monster == 1210 || $monster == 1223 || $monster == 1284 || ($monster >= 1324 && $monster <= 1363) || $monster == 1006 || $monster == 1407 || $monster == 1411 || $monster == 1414 || $monster == 1496 || $monster == 1501);
+	setnpctimer 0;
+	initnpctimer;
+	setnpcdisplay "disguise",$monster;
+	set $MonsterName$, strmobinfo(1,$monster);
+	
+	
+	deletepset 1;
+	// defpattern 1,"([^:]+):.\\s*"+$MonsterName$+".*", "YOGANE";
+	// defpattern 1,"([^:]+):.*\\s"+$MonsterName$+"(.*)", "YOGANE"; // NUEVO
+	activatepset 1;
+	npctalk "¿Cuál es mi nombre?"+$MonsterName$;
+	sleep 2000;
+	npcwalkto 23,115;
+	sleep 1000;
+	npcwalkto 21,119;
+	sleep 1000;
+	npcwalkto 18,115;
+	sleep 1000;
+	npcwalkto 21,112;
+	end;
+	
+	OnTimer10000:
+		if (!.DisguiseWon)
+		{ 
+			npctalk "Vamos. ¿Qué monstruo soy?";
+			npcwalkto 107,99;
+			sleep 2000;
+			npcwalkto 102,99;
+			sleep 2000;
+			npcwalkto 102,103;
+			sleep 2000;
+			npcwalkto 102,99;
+		}
+		end;
+
+
+	OnTimer25000:
+		if (!.DisguiseWon) 
+		{
+			npctalk "Nadie sabe que monstruo?";
+			npcwalkto 23,115;
+			sleep 1000;
+			npcwalkto 21,119;
+			sleep 1000;
+			npcwalkto 18,115;
+			sleep 1000;
+			npcwalkto 21,112;
+		}
+		end;
+
+	OnTimer35000:
+		if (!.DisguiseWon) 
+		{
+			npctalk " Tienen 10 segundos para adivinar mi nombre.";
+			npcwalkto 23,115;
+			sleep 1000;
+			npcwalkto 21,119;
+			sleep 1000;
+			npcwalkto 18,115;
+			sleep 1000;
+			npcwalkto 21,112;
+		}
+		end;
+
+	OnTimer45000:
+		if (!.DisguiseWon)
+		{ 
+			sleep 300;
+			deletepset 1;
+			npctalk "La ronda ha terminado.";
+			set $DisguiseRound, $DisguiseRound + 1;
+			sleep 3000;
+			npctalk $MonsterName$ + " hubiera sido la respuesta correcta.";
+			sleep 5000;
+			if ($DisguiseRound >= 6)
+			{
+				set $DisguiseRound, 0;
+				sleep 3000;
+				npctalk "El evento ha terminado!";
+				sleep 3500;
+				npctalk "Nos vemos la proxima!";
+				sleep 2000;
+				emotion 12;
+				sleep 1000;
+				mapwarp "quiz_00","gonryun",158,112;
+				setnpcdisplay "disguise",50;
+				disablenpc "disguise";
+				end;
+			}
+			goto OnStart;
+		}
+		end;
+
+	
+
+}
+
+//-----------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------
+
+-	script	guessAnnouncer	-1,{
+
+OnWhisperGlobal:
+mes "Panel de Control de Disguise Event";
+switch(select("Comenzar Evento:Probar:Salir")) {
+case 1:
+mes "Listo =)";
+close2;
+goto OnEvenPvStart_DE;
+break;
+
+case 2:
+mes "Listo =)";
+close2;
+.@idp_1 = 1;
+goto OnEvenPvStart_DE2;
+break;
+
+case 3:
+mes "Bien =)";
+close;
+break;
+}
+end;
+
+OnMinute00:
+
+OnEvenPvStart_DE:
+	
+	announce "El evento Adivina el Monstruo esta a punto de comenzar!",0;
+	set $guessbegin, 0;
+	sleep 5000;
+	announce "Si quieres unirte, ven a Gonryun y entra en el portal warp.",0;
+	enablenpc "guesswarp";
+	enablenpc "disguise";
+	sleep 5000;
+	announce "El portal se va a cerrar en un minuto.",0;  
+	sleep 30000;
+	announce "30 segundos para cerrar el portal.",0;
+	sleep 20000;
+	announce "10",0;
+	sleep 1000;
+	announce "9",0;
+	sleep 1000;
+	announce "8",0;
+	sleep 1000;
+	announce "7",0;
+	sleep 1000;
+	announce "6",0;
+	sleep 1000;
+	announce "5",0;
+	sleep 1000;
+	announce "4",0;
+	sleep 1000;
+	announce "3",0;
+	sleep 1000;
+	announce "2",0;
+	sleep 1000;
+	announce "1",0;
+	sleep 1000;
+	announce "El portal ha sido cerrado.",0;
+	disablenpc "guesswarp";
+	sleep 5000;
+	announce "Próximo Evento comenzará en 1 hora.",0;
+	OnEvenPvStart_DE2: if (.@idp_1 == 1){
+	enablenpc "disguise";
+	announce "Se ha iniciado el evento desde un punto de prueba.",0;
+	.@idp_1 = 0;
+	}
+	set $DisguiseRound, 0;
+	donpcevent "disguise::OnStart";
+	end;
+
+OnInit:
+	disablenpc "disguise";
+	disablenpc "guesswarp";
+
+}
+
+//-----------------------------------------------------------------------------------
+//------------------Warp Portal------------------------------------------------------
+gonryun,154,107,0	warp	guesswarp	2,2,quiz_00,4,108	
+//-----------------------------------------------------------------------------------
+//------------------Map Flags--------------------------------------------------------
+quiz_00	mapflag	nowarpto
+quiz_00	mapflag	noskill
+quiz_00	mapflag	nowarp
+quiz_00	mapflag	nosave
+quiz_00	mapflag	nomemo
+quiz_00	mapflag	noteleport
+//-----------------------------------------------------------------------------------

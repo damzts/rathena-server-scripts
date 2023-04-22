@@ -1,0 +1,104 @@
+prontera,253,338,6	script	Kakero	795,{
+	mes "[Kakero]";
+	if(BerzQuest == 1) goto L_Already;
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... Soy el mejor ladron del mundo, Quieres algunos artefactos antiguos que me robe?....";
+	next;
+ menu "^E9967AKakashy Mask^000000",-,"^E9967ABack Sword^000000",M_2,"Leave",M_EXIT;
+
+ mes "[Kakero]";
+ mes "Oh!.. Quieres la mascara mas antigua que obtube en las tumbas de Alrachit.. la ^E9967AKakashy Mask^000000";
+ emotion e_rock;
+ next;
+ mes "[Kakero]";
+ mes "Para poder crear el ^E9967AKakashy Mask^000000. Es nesario que me reunas estos objetos:";
+
+ mes "^E9967A350^000000  White Mask";
+ mes "^E9967A350^000000  Dark Mask";
+ mes "^E9967A5^000000  Azoth ";
+ mes "^E9967A15^000000  Assassin Mask";
+ mes "^E9967A2^000000  Will of Red Darkness";
+ mes "^E9967A20^000000  Black Dyestuffs";
+ mes "^E9967A60^000000      Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A50,000,000^000000 Zenys";
+ next;
+ mes "[Kakero]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+ mes "[Kakero]";
+  mes "Entregame lo que te he pedido para entregare una mascara muy rara ...";
+  next;
+  mes "[Kakero]";
+ if(countitem(7568) < 350 || countitem(7157) < 350 || countitem(1235) < 5 || countitem(5096) < 15 || countitem(7566) < 2 || countitem(983) < 20 || countitem(26021) < 60 || countitem(7539) < 600 ||Zeny < 50000000) goto L_noItems;
+
+  		delitem 7568, 350;
+  		delitem 7157, 350;
+  		delitem 1235, 5;
+  		delitem 5096, 15;
+		delitem 7566, 2;
+  		delitem 983, 20;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 50000000;
+  		getitem 20063, 1;
+
+ mes "Exelente,Ahora ocultate y roba a todos en los pueblos con esta mascara te podras ocultar, te entrego la  ^E9967AKakashy Mask^000000 !";
+emotion e_grat;
+ close;
+
+M_2:
+ mes "[Kakero]";
+ mes "Oh!.. Quieres la espada de Alrachit.... creo que se llamaba .. ^E9967ABack Sword^000000";
+ emotion e_rock;
+ next;
+ mes "[Kakero]";
+ mes "Para que te entrege la ^E9967ABack Sword^000000. Necesito estas cosas...:";
+ mes "^E9967A5^000000  Old Hilt";
+ mes "^E9967A150^000000  Metal Fragments";
+ mes "^E9967A250^000000  Broken Sword";
+ mes "^E9967A5^000000  Immaterial Sword ";
+ mes "^E9967A5^000000  Orcish Sword";
+ mes "^E9967A3^000000  Atlas Weapon  ... ID (1175)";
+ mes "^E9967A60^000000      Medallas Evento";
+ mes "^E9967A500^000000      Poring Coins";
+ mes "^E9967A50,000,000^000000 Zenys";
+ next;
+ mes "[Kakero]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+ mes "[Kakero]";
+  mes "Entregame lo que te he pedido para entregate la poderosa Back Sword...  dejame revisar...";
+  next;
+  mes "[Kakero]";
+ if(countitem(7022) < 5 || countitem(7095) < 150 || countitem(7110) < 250 || countitem(1141) < 5 || countitem(1124) < 5 || countitem(1175) < 3 || countitem(26021) < 60 || countitem(7539) < 500 ||Zeny < 50000000) goto L_noItems;
+
+  		delitem 7022, 5;
+  		delitem 7095, 150;
+  		delitem 7110, 250;
+  		delitem 1141, 5;
+  		delitem 1124, 5;
+  		delitem 1175, 3;
+  		delitem 26021, 60;
+  		delitem 7539, 500;
+  		set Zeny, Zeny - 50000000;
+  		getitem 20035, 1;
+
+ mes "Ten tu Back Sword, se podria decir que la robe para ti, disfruta ahora de tus nuevos poderes con la ... ^E9967ABack Sword^000000 !";
+emotion e_grat;
+ close;
+
+L_noItems:
+ mes "Creo que aun te faltan algunas cosas vuelve cuando tengas todo...";
+ emotion e_sry;
+ close;
+
+M_EXIT:
+ mes "[Kakero]";
+ mes "Bueno, si TIENES el VALOR para ser parte de este reto, aqui estare...";
+ emotion e_hmm;
+ close;
+}

@@ -1,0 +1,209 @@
+prontera,164,175,0	script	PvP Warp	45,2,2,{
+end;
+OnTouch:
+	switch (rand(1,5)) {
+		case 1: // Izquierda
+			warp "pvp_n_1-5",65,99;
+			break;
+			
+		case 2: // Abajo
+			warp "pvp_n_1-5",99,65;
+			break;
+			
+		case 3: // Derecha
+			warp "pvp_n_1-5",134,100;
+			break;
+			
+		case 4: // Arriba
+			warp "pvp_n_1-5",100,134;
+			break;
+			
+		case 5: // Aleatorio
+			warp "pvp_n_1-5",0,0;
+			break;
+	} // End switch
+end;
+
+
+} // End Script
+
+// --------------------------------------------------
+//	Duplicates:
+// --------------------------------------------------
+rachel,121,104,0	duplicate(PvP Warp)	PvP Warp#1	45,2,2
+alberta,38,240,0	duplicate(PvP Warp)	PvP Warp#2	45,2,2
+aldebaran,133,118,0	duplicate(PvP Warp)	PvP Warp#3	45,2,2
+amatsu,191,86,0	duplicate(PvP Warp)	PvP Warp#4	45,2,2
+ayothaya,223,165,0	duplicate(PvP Warp)	PvP Warp#5	45,2,2
+comodo,188,163,0	duplicate(PvP Warp)	PvP Warp#6	45,2,2
+einbroch,53,202,0	duplicate(PvP Warp)	PvP Warp#7	45,2,2
+hugel,107,151,0	duplicate(PvP Warp)	PvP Warp#8	45,2,2
+lighthalzen,152,109,0	duplicate(PvP Warp)	PvP Warp#9	45,2,2
+geffen,130,69,0	duplicate(PvP Warp)	PvP Warp#10	45,2,2
+izlude,136,123,0	duplicate(PvP Warp)	PvP Warp#11	45,2,2
+xmas,141,129,0	duplicate(PvP Warp)	PvP Warp12	45,2,2
+morocc,149,83,0	duplicate(PvP Warp)	PvP Warp13	45,2,2
+payon,185,89,0	duplicate(PvP Warp)	PvP Warp#14	45,2,2
+yuno,153,45,0	duplicate(PvP Warp)	PvP Warp#15	45,2,2
+gonryun,167,115,0	duplicate(PvP Warp)	PvP Warp#16	45,2,2
+louyang,225,107,0	duplicate(PvP Warp)	PvP Warp#17	45,2,2
+umbala,126,136,0	duplicate(PvP Warp)	PvP Warp#18	45,2,2
+dicastes01,205,178,0	duplicate(PvP Warp)	PvP Warp#19	45,2,2
+moscovia,206,193,0	duplicate(PvP Warp)	PvP Warp#20	45,2,2
+niflheim,175,144,0	duplicate(PvP Warp)	PvP Warp#21	45,2,2
+veins,211,118,0	duplicate(PvP Warp)	PvP Warp#22	45,2,2
+
+prontera,167,174,3	script	PvP Rank#PvP::PvPW	837,{
+mes "[^FF0000Rank PvP^000000]";
+mes "Top 1: ^0000FF" +$top1pvp$ +"^000000 muertes: ^FF0000" +$top1pvp +"^000000.";
+mes "Top 2: ^0000FF" +$top2pvp$ +"^000000 muertes: ^FF0000" +$top2pvp +"^000000.";
+mes "Top 3: ^0000FF" +$top3pvp$ +"^000000 muertes: ^FF0000" +$top3pvp +"^000000.";
+mes "Top 4: ^0000FF" +$top4pvp$ +"^000000 muertes: ^FF0000" +$top4pvp +"^000000.";
+mes "Top 5: ^0000FF" +$top5pvp$ +"^000000 muertes: ^FF0000" +$top5pvp +"^000000.";
+close;
+
+OnInit:
+	do {
+		delwaitingroom;
+		waitingroom "PvP Warp [" +getmapusers("pvp_n_1-5") +" users]",0;
+	sleep 50; // Evites super infinity loop
+	} while(1); // End Loop
+end;
+} // End Script
+
+
+	-	script	PvPAnnounce	-1,{
+OnPCKillEvent:
+	getmapxy(.@mapa$,.@x,.@y,0);
+	if (.@mapa$ != "pvp_n_1-5") end;
+	if (rid2name(killedrid) == strcharinfo(0)) {
+		mapannounce .@mapa$,"El jugador [" +strcharinfo(0) +"] se ha suicidado.",bc_blue;
+	} else {
+		mapannounce .@mapa$,"El jugador [" +strcharinfo(0) +"] ha asesinado a [" +rid2name(killedrid) +"]",bc_blue;
+		set Muertes, Muertes + 1;
+		callfunc ("PvPRank",Muertes,strcharinfo(0));
+	} // End if
+end;
+} // End Script
+
+pvp_n_1-5	mapflag	nopenalty
+
+-	script	MapLoad	-1,{
+OnPCLoadMapEvent:
+	getmapxy (.@mapa$,.@x,.@y,0);
+	if (.@mapa$ != "pvp_n_1-5") end;
+	dispbottom "[PvP Rank]: Has matado : " +Muertes +" en PvP.";
+end;
+} // End Script
+
+pvp_n_1-5	mapflag	loadevent
+
+function	script	PvPRank	{
+set @mvptotal, getarg(0);
+set @nomb$, getarg(1);
+
+if (@mvptotal > $top1pvp) {
+	if ($top1pvp$ == strcharinfo(0)) { // Si estamos en top 1
+		// Simplemente seguimos contando
+		set $top1pvp, @mvptotal;
+		set $top1pvp$, @nomb$;
+	} else { // Si alcanzamos el top 1
+		// Almacenamos el antiguo top 1
+		set @aux, $top1pvp;
+		set @aux$, $top1pvp$;
+		// Nos asignamos al top 1
+		set $top1pvp, @mvptotal;
+		set $top1pvp$, @nomb$;
+		// El viejo top 1 ahora es top 2
+		set $top2pvp, @aux;
+		set $top2pvp$, @aux$;
+	} // End if
+} else if (@mvptotal > $top2pvp) {
+	if ($top2pvp$ == strcharinfo(0)) { // Si estamos en top 2
+		// Seguimos contando las muertes del top 2
+		set $top2pvp, @mvptotal;
+		set $nomb2, @nomb$;
+	} else { // Si alcanzamos el top 2
+		// Almacenamos el antiguo top 2
+		set @aux, $top2pvp;
+		set @aux$, $top2pvp$;
+		// Nos asignamos al top 2
+		set $top2pvp, @mvptotal;
+		set $top2pvp$, @nomb$;
+		// El viejo top 2 ahora es top 3
+		set $top3pvp, @aux;
+		set $top3pvp$, @aux$;
+	} // End if
+} else if (@mvptotal > $top3pvp) {
+	if ($top3pvp$ == strcharinfo(0)) { // Si estamos en top 3
+		// Seguimos contando el top 3
+		set $top3pvp, @mvptotal;
+		set $top3pvp$, @nomb$;
+	} else { // Si alcanzamos el top 3
+		// Almacenamos el antiguo top 3
+		set @aux, $top3pvp;
+		set @aux$, $top3pvp$;
+		// Nos asignamos al top 3
+		set $top3pvp, @mvptotal;
+		set $top3pvp$, @nomb$;
+		// El viejo top 3 ahora es top 4
+		set $top4pvp, @aux;
+		set $top4pvp$, @aux$;
+	} // End if
+} else if (@mvptotal > $top4pvp) {
+	if ($top4pvp$ == strcharinfo(0)) { // Si estamos en top 4
+		// Seguimos contando el top 4
+		set $top4pvp, @mvptotal;
+		set $top4pvp$, @nomb$;
+	} else { // Si alcanzamos el top 4
+		// Almacenamos el antiguo top 4
+		set @aux, $top4pvp;
+		set @aux$, $top4pvp$;
+		// Nos asignamos al top 4
+		set $top4pvp, @mvptotal;
+		set $top4pvp$, @nomb$;
+		// El viejo top 4 es ahora top 5
+		set $top5pvp, @aux;
+		set $top5pvp$, @aux$;
+	} // End if
+} else if (@mvptotal > $top5pvp) {
+	if ($top5pvp$ == strcharinfo(0)) { // Si estamos en top 5
+		// Seguimos contando el top5
+		set $top5pvp, @mvptotal;
+		set $nomb5, @nomb$;
+	} else { // Si alcanzamos el top 5
+		// Directamente nos sobreescribimos en el top 5
+		set $top5pvp, @mvptotal;
+		set $top5pvp$, @nomb$;
+	} // End if
+} // End if
+return;
+} // End function
+
+pvp_n_1-5	mapflag	nogo
+
+// --------------------------------------------------
+//	Duplicates:
+// --------------------------------------------------
+rachel,117,104,3	duplicate(PvPW)	PvP Rank#1	837
+alberta,38,243,3	duplicate(PvPW)	PvP Rank#2	837
+aldebaran,131,117,3	duplicate(PvPW)	PvP Rank#3	837
+amatsu,189,86,3	duplicate(PvPW)	PvP Rank#4	837
+ayothaya,226,164,3	duplicate(PvPW)	PvP Rank#5	837
+comodo,189,165,3	duplicate(PvPW)	PvP Rank#6	837
+einbroch,54,205,3	duplicate(PvPW)	PvP Rank#7	837
+hugel,109,149,3	duplicate(PvPW)	PvP Rank#8	837
+lighthalzen,150,111,3	duplicate(PvPW)	PvP Rank#9	837
+geffen,132,72,3	duplicate(PvPW)	PvP Rank#10	837
+izlude,134,125,3	duplicate(PvPW)	PvP Rank#11	837
+xmas,139,126,3	duplicate(PvPW)	PvP Rank#12	837
+morocc,146,83,3	duplicate(PvPW)	PvP Rank#13	837
+payon,188,89,3	duplicate(PvPW)	PvP Rank#14	837
+yuno,150,45,3	duplicate(PvPW)	PvP Rank#15	837
+gonryun,169,115,3	duplicate(PvPW)	PvP Rank#16	837
+louyang,227,108,3	duplicate(PvPW)	PvP Rank#17	837
+umbala,126,138,3	duplicate(PvPW)	PvP Rank#18	837
+dicastes01,208,178,3	duplicate(PvPW)	PvP Rank#19	837
+moscovia,206,191,3	duplicate(PvPW)	PvP Rank#20	837
+niflheim,172,175,3	duplicate(PvPW)	PvP Rank#21	837
+veins,209,117,3	duplicate(PvPW)	PvP Rank#22	837

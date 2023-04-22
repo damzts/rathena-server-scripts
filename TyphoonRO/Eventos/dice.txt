@@ -1,0 +1,208 @@
+
+
+
+-	script	Dice#announcer	-1,{
+
+OnInit:
+	disablenpc "izludevt";
+	disablenpc "Dice#evnt1";
+	end;
+		
+OnMinute30:
+
+	announce "Evento Dice: Llegó la hora del Evento Dice",0;
+	sleep2 10000;
+	announce "Evento Dice: Los que quieran participar, vayan al centro de Izlude y entrar en el Portal.",0;
+	enablenpc "izludevt";
+	sleep2 10000;
+	announce "Evento Dice: 1 minuto y el Portal se cierra.",0;
+	sleep2 10000;
+	initnpctimer;
+	end;
+
+OnTimer30000:
+	announce "Evento Dice: Últimos 30 segundos.",0;
+	sleep2 5000;
+	end;
+	
+OnTimer50000:
+	announce "Evento Dice: Últimos 10 segundos.",0;
+	end;
+	
+OnTimer55000:
+	announce " - 5 -",0;
+	end;
+	
+OnTimer56000:
+	announce " - 4 -",0;
+	end;
+	
+OnTimer57000:
+	announce " - 3 -",0;
+	end;
+	
+OnTimer58000:
+	announce " - 2 -",0;
+	end;
+	
+OnTimer59000:
+	announce " - 1 -",0;
+	end;
+	
+OnTimer60000:
+	announce "Evento Dice: Se acabó el tiempo.",0;
+	end;
+	
+OnTimer61000:
+	disablenpc "izludevt";
+	donpcevent "Dice#evnt1::OnEnable";
+	stopnpctimer;
+	end;
+	
+OnTimer62000:
+	announce "Evento Dice: El próximo evento sera en 1 hora más",0;
+	end;
+}
+	
+//--------------------------------------------------
+	
+izlude,128,108,0	warp	izludevt	2,2,quiz_01,204,90	
+	
+//--------------------------------------------------
+
+quiz_01,204,93,6	script	Dice#evnt1	715,{
+
+//--------------------------------------------------
+
+	mes "[Dice]";
+	mes "Por favor, dime tu nombre";
+	next;
+	input .@name$;
+	if(.@name$ != strcharinfo(0)) 
+	{
+		mes "[Dice]";
+		mes "¿Estás seguro de que es ese el nombre de tu personaje?";
+		close;
+	}
+	mes "[Dice]";
+	mes "Felicidades. Has ganado.";
+	close2;
+	announce "Dice: Tenemos un ganador, "+.@name$+".",0;
+	getitem 7539,40; // poring coin , editar segun tu preferencia.
+	getitem 26021,4;
+	warp "prontera",155,182;
+	disablenpc "Dice#evnt1";
+	disablenpc "izludevt";
+	end;
+	
+OnEnable:
+	mapannounce "quiz_01","Evento Dice: Estamos a punto de iniciar el evento Dice.",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Pero antes de iniciar el evento explicamos las reglas como jugar...",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Lo dire sólo una vez, así que lea cuidadosamente.",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Voy a escoger un número, del 1 al 4. Entonces voy a hacer una cuenta regresiva de 5 a 0.",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Todo lo que tienes que hacer es ir a la casilla del número que desees.",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Ejemplo, si escojo el número 4, todos los jugadores de pie en los números 1 a 3 seran retornados a la ciudad.",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Vamos a hacer una y otra vez hasta que sólo quede 1 jugador en el mapa.",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Oh yeah! Antes de que me olvide que debe ir dentro de una seccion, porque si te quedas de pie en la escalera u otra parte, quedarás automáticamente descalificado.",0;
+	sleep2 10000;
+	mapannounce "quiz_01","Evento Dice: Eso es todo .. Ahora vamos a jugar ...",0;
+	sleep2 10000;
+	goto L_Start;
+	end;
+	
+L_Start:
+	if(getmapusers("quiz_01") == 1) goto L_Champ;
+	if(getmapusers("quiz_01") == 0) goto L_None;
+	if(getmapusers("quiz_01") > 1) 
+	{
+		mapannounce "quiz_01", "Dice: . . . . .",0;
+		set $@number, rand(1,4);
+		sleep2 10000;
+		mapannounce "quiz_01", "Evento Dice: Ya tengo un número. Por favor, vaya a la casilla del número que desea .... GO!",0;
+		sleep2 10000;
+		mapannounce "quiz_01", "Evento Dice: 5",0;
+		sleep2 5000;
+		mapannounce "quiz_01", "Evento Dice: 4",0;
+		sleep2 4000;
+		mapannounce "quiz_01","Evento Dice: 3",0;
+		sleep2 3000;
+		mapannounce "quiz_01", "Evento Dice: 2",0;
+		sleep2 2000;
+		mapannounce "quiz_01", "Evento Dice: 1",0;
+		sleep2 1000;
+		mapannounce "quiz_01", "Evento Dice: Se acabó el tiempo.",0;
+		donpcevent "evnt#1::OnEnable";
+		mapannounce "quiz_01", "Evento Dice: Número ganador "+$@number+".",0;
+		if(($@number != 1) && ($@number != 2) && ($@number != 3)) goto L_Lose1;
+		if(($@number != 1) && ($@number != 2) && ($@number != 4)) goto L_Lose2;
+		if(($@number != 1) && ($@number != 3) && ($@number != 4)) goto L_Lose3;
+		if(($@number != 2) && ($@number != 3) && ($@number != 4)) goto L_Lose4;
+		end;
+	}
+	
+L_Lose1:
+	areawarp "quiz_01",183,81,191,59,"prontera",155,182;
+	areawarp "quiz_01",195,81,203,59,"prontera",155,182;
+	areawarp "quiz_01",207,81,215,59,"prontera",155,182;
+	goto L_Start;
+	end;
+
+L_Lose2:
+	areawarp "quiz_01",183,81,191,59,"prontera",155,182;
+	areawarp "quiz_01",195,81,203,59,"prontera",155,182;
+	areawarp "quiz_01",219,81,227,59,"prontera",155,182;;
+	goto L_Start;
+	end;
+	
+L_Lose3:
+	areawarp "quiz_01",183,81,191,59,"prontera",155,182;
+	areawarp "quiz_01",207,81,215,59,"prontera",155,182;
+	areawarp "quiz_01",219,81,227,59,"prontera",155,182;
+	goto L_Start;
+	end;
+	
+L_Lose4:
+	areawarp "quiz_01",195,81,203,59,"prontera",155,182;
+	areawarp "quiz_01",207,81,215,59,"prontera",155,182;
+	areawarp "quiz_01",219,81,227,59,"prontera",155,182;
+	goto L_Start;
+	end;
+	
+L_Champ:
+	mapannounce "quiz_01","Evento Dice: Ven a mí y dime tu nombre.",0;
+	enablenpc "Dice#evnt1";
+	end;
+	
+L_None:
+	disablenpc "Dice#evnt1";
+	announce "Evento Dice: Que pena pero nadie ha ganado. Suerte en la próxima",0;
+	end;
+}
+	
+-	script	evnt#1	-1,{
+
+OnEnable:
+	areawarp "quiz_01",182,94,228,88,"prontera",155,182;
+	areawarp "quiz_01",185,87,188,82,"prontera",155,182;
+	areawarp "quiz_01",197,87,200,82,"prontera",155,182;
+	areawarp "quiz_01",209,87,212,82,"prontera",155,182;
+	areawarp "quiz_01",221,87,224,82,"prontera",155,182;
+	end;
+	}
+
+//-----------------------------------------------------------------------------------
+//------------------Map Flags--------------------------------------------------------
+quiz_01	mapflag	nowarpto
+quiz_01	mapflag	noskill
+quiz_01	mapflag	nowarp
+quiz_01	mapflag	nosave
+quiz_01	mapflag	nomemo
+quiz_01	mapflag	noteleport
+//-----------------------------------------------------------------------------------

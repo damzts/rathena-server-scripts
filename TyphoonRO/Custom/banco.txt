@@ -1,0 +1,86 @@
+prontera,140,175,6	script	Banco	109,{  
+ mes"[Banco]";
+ mes strcharinfo(0)+", Bienvenido al banco de Prontera!!";
+
+ set @kb_int,(gettime(6)*31)+gettime(5); 
+ set @income,0;
+//calculate %
+ if (#kafrabank<=0 || #kb_int>=@kb_int) goto L_NoIncomeToday;
+ set @income,(#kafrabank/1000)*(@kb_int-#kb_int); //@income == % of the summ
+L_NoIncomeToday:
+ set #kb_int,@kb_int; 
+  
+ if(#kafrabank==0) mes "Nosotros de abriremos una cuenta bancaria.";
+ if(@income>0) mes "Today's income ^135445" + @income + "^000000 zeny.";
+ set #kafrabank,#kafrabank+@income;
+ if(#kafrabank>0) mes "Tu cuenta: ^135445" + #kafrabank + "^000000 zeny.";
+ mes "Que deseas hacer??";
+ next;
+ if(#kafrabank==0) menu "-Abrir una cuenta bancaria",-,"-Salir",B_EXIT2;
+ if(#kafrabank>0) menu "-Depositar Dinero",-,"-Sacar Dinero",M_WITHDRAW,"-Cancelar",B_EXIT2;
+
+ mes"[Banco]";
+ mes "Por favor, ingresa la cantidad que quieres depositar.";
+ next;
+ input @kafrabank;
+  
+ if(@kafrabank<1000) goto L_LESS_1000;
+ if(@kafrabank>10000000) goto L_TOO_BIG_AMOUNT;
+ if(@kafrabank+@kafrabank2>zeny) goto L_NOT_ENOUGH;
+ set zeny,zeny-@kafrabank;
+ set #kafrabank,#kafrabank+@kafrabank;
+ mes"[Banco]";
+ mes "Has decidido depositar ^135445" + @kafrabank + "z^000000.";
+ 
+ goto B_EXIT;
+
+M_WITHDRAW:  
+ if(#kafrabank==0) goto L_ZERO_ACCOUNT;
+ mes"[Banco]";
+ mes "Tu Dinero: ^135445" + #kafrabank + "^000000 zeny.";
+ mes "Cuanto dinero deseas Sacar?";
+ next;
+ input @kafrabank;
+  
+ if(@kafrabank<1) goto B_EXIT2;
+ if(@kafrabank>10000000) goto L_TOO_BIG_AMOUNT;
+ if(@kafrabank>#kafrabank) goto L_NOT_ENOUGH;
+ set #kafrabank,#kafrabank-@kafrabank;
+ set zeny,zeny+@kafrabank;
+ mes"[Banco]";
+ mes "Has elejido sacar ^135445" + @kafrabank + "z^000000, toma...";
+ goto B_EXIT;
+  
+L_NOT_ENOUGH:  
+ mes"[Banco]";
+ mes "No tienes ni un zeny en tu cuenta bancaria.";
+ next;
+ goto B_EXIT2;
+
+L_ZERO_ACCOUNT:  
+ mes"[Banco]";
+ mes "No tienes ni un zeny en tu cuenta bancaria!";
+ next;
+ goto B_EXIT2;
+
+L_TOO_BIG_AMOUNT:  
+ mes"[Banco]";
+ mes "Perdona. Lo maximo que se puede dipositar es de 10,000,000 zeny.";
+ next;
+ goto B_EXIT2;
+
+L_LESS_1000:  
+ mes"[Banco]";
+ mes "Perdona, lo minimo que se puede depositar es  1,000 zeny.";
+ next;
+ goto B_EXIT2;
+  
+B_EXIT:
+ mes "...";
+ next;
+
+B_EXIT2:  
+ mes"[Banco]";
+ mes "Vuelve cuando quieras.";
+ close;
+}

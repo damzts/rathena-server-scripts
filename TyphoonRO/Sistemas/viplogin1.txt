@@ -1,0 +1,52 @@
+-	script	gold	-1,{
+
+OnInit:
+set $diasvipperm,15;
+end;
+
+OnPCLoginEvent:
+if (#yatengovipprimero == 0){
+dispbottom "Tu cuenta parece ser Nueva envia un mensaje a npc:gold para recibir tus 15 dias VIP gratis.";
+end;
+}
+end;
+
+OnWhisperGlobal:
+if (#yatengovipprimero == 1)end;
+mes "Bienvenido a Wolf RO!";
+next;
+mes "Esta parece ser una cuenta nueva :D";
+next;
+mes "Te dare 15 dias VIP Gold para que aproveches tu leveo al maximo!";
+next;
+mes "Solo un sencillo paso :)";
+next;
+mes "Escribe EXACTAMENTE tu nombre de usuario de cuenta.";
+sleep2 2000;
+next;
+sleep2 2000;
+input .@accountName$;
+next;
+mes "...";
+next;
+mes "....";
+next;
+set .@getAccountId,query_sql("SELECT `account_id`FROM login WHERE `userid` = '"+.@accountName$+"';",.@accountId);
+if (.@accountId == getcharid(3)){
+
+		mes "Identificacion: "+.@accountid1+".";
+		sleep2 rand(100,850);
+		query_sql("INSERT INTO vip_gold (`account_id`,`account_name`,`start_date`,`end_date`,`status`) VALUES ("+.@accountId+",'"+.@accountName$+"','"+gettimestr("%Y-%m-%d",21)+"','"+gettimestr("%Y-%m-%d",21)+"','ACTIVE');");
+		sleep2 400;
+		query_sql("UPDATE vip_gold SET end_date = DATE_ADD(start_date, INTERVAL "+$diasvipperm+" DAY) WHERE account_id = "+.@accountId+";");
+		query_sql("UPDATE `login` SET `group_id` = 2 WHERE `account_id` = "+.@accountId+";");
+		query_sql("UPDATE login SET `account_type` = 'GOLD' WHERE account_id = "+.@accountId+";");
+		mes "Cuenta "+.@accountId+" actualizada";
+		mes "correctamente.";
+		close;
+		set #yatengovipprimero,1;
+}
+mes "Vuelve a intentarlo...";
+close;
+end;
+}

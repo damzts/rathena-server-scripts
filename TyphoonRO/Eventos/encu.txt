@@ -1,0 +1,83 @@
+-	script	poringito	-1,{
+
+OnClock0120:
+OnClock0220:
+OnClock0320:
+OnClock0420:
+OnClock0520:
+OnClock0620:
+OnClock0720:
+OnClock0820:
+OnClock0920:
+OnClock1020:
+OnClock1120:
+OnClock1220:
+OnClock1320:
+OnClock1420:
+OnClock1520:
+OnClock1620:
+OnClock1720:
+OnClock1820:
+OnClock1920:
+OnClock2020:
+OnClock2120:
+OnClock2220:
+OnClock0020:
+initnpctimer;
+
+OnTimer0:
+	announce "Ha inciado el evento de Encontrar el NPC llamado Omega Requiem",0;
+	sleep2 5000;
+	announce "El npc se encuentra en algun lugar de Aldebaran, que esperas ve y encuentralo!!!!.",0;
+	enablenpc "Omega Requiem#01";
+	monster "aldebaran",0,0,"Omega Requiem",1725,650;
+	end;
+OnTimer30000:
+	if(.find==1){stopnpctimer;movenpc "Omega Requiem#01",51,168; set .move,0; set .find,0; killmonsterall "aldebaran",1; disablenpc "Omega Requiem#01";end;}
+	if(.move ==12){
+	mapannounce "aldebaran","El NPC Omega Requiem no ha podido ser encontrado por ningun usuario...suerte para la proxima xD",0;
+	movenpc "Omega Requiem#01",51,168;
+	disablenpc "Omega Requiem#01";
+	killmonsterall "aldebaran",1;
+	set .move,0;
+	stopnpctimer;
+	end;}
+	mapannounce "aldebaran","El NPC Encuentrenme ha cambiado de posicion",0; 
+	//if(.move==0){set .@x,62; set .@y,212;}
+	//if(.move==1){set .@x,72; set .@y,81;}
+	//if(.move==2){set .@x,216; set .@y,226;}
+	//if(.move==3){set .@x,92; set .@y,145;}
+	//if(.move==4){set .@x,53; set .@y,116;}
+	//if(.move==5){set .@x,140; set .@y,237;}
+	set .@x,rand(40,235);
+	set .@y,rand(36,238);
+	movenpc "Omega Requiem#01",.@x,.@y; 
+	set .move,.move+1;
+	initnpctimer;
+	end;
+}
+aldebaran,143,228,5	script	Omega Requiem#01	1002,{
+	if (.hecho==1){end;}
+	set .hecho,1;
+	mes "[Omega Requiem]";
+	mes "Waaaa me has encontrado xD waw si que eres bueno buscando";
+	mes "Espero asi de entusiasta encuentres las cosas que tienes en tu cuarto jeje";
+	next;
+	mes "Ok, aqui tienes tu premio por haberme encontrado, Anunciaré que tu me encontraste FELICIDADES.";
+	next;
+	announce " El Usuario " + strcharinfo(0) + " ha encontrado el NPC Omega Requiem Felicidades!!!",0;
+	close2;
+	getitem 7539,60;
+	getitem 26021,15;
+	movenpc "Omega Requiem#01",51,168;
+	atcommand "@killmonster2";
+	disablenpc "Omega Requiem#01";
+	set .hecho,0;
+	set getvariableofnpc(.find,"poringito"),1;
+	end;
+	
+OnInit:
+	disablenpc "Omega Requiem#01";
+	end;
+}
+

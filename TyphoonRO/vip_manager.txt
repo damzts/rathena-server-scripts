@@ -1,0 +1,80 @@
+-	script	vip	909,{ end;
+OnWhisperGlobal:
+if (!getgroupid() > 60) end;
+mes "Selecciona lo que quieres hacer:";
+next; //Modificar VIP:Modificar asistente
+switch(select("Listar cuentas:Activar VIP/Asistente")){
+case 1:
+mes "Me fui a dormir antes de terminar esto";
+mes "lo siendo chatovs :'v";
+close;
+break;
+
+case 2:
+switch(select("Modificar VIP:Modificar asistente")){
+	case 1:
+	mes "Que cuenta?";
+	next;
+	input .@cuenta$;
+	query_sql("SELECT `vip_until`, `group_id` FROM login WHERE `userid` = '"+.@cuenta$+"';",.@fechaActual$,.@tipo);
+	mes "Expiracion actual: "+.@fechaActual$;
+	mes "Tipo: "+$@vip_ranks$[.@tipo];
+	if(select("Modificar","Cancelar") == 2) break;
+	next;
+	mes "Que grupo agregaras?";
+	.@nivel = select("Normal:Bronze:Plata:Oro:Platino")-1;
+	L_VIPB:
+	next;
+	mes "Dia"; 
+	input .@dia; if (.@dia > 31) { dispbottom "Fecha incorrecta detectada."; goto L_VIPB;} next;
+	mes "Mes";
+	input .@mes; if (.@mes > 12) { dispbottom "Fecha incorrecta detectada."; goto L_VIPB;} next;
+	mes "Año";
+	input .@anio; if (.@anio > 2020 || .@anio < 2000) { dispbottom "Fecha incorrecta detectada."; goto L_VIPB;}
+	.@date_mod$ = .@anio+"-"+.@mes+"-"+.@dia;
+	query_sql("UPDATE login SET `vip_until` = '"+.@date_mod$+"' WHERE `userid`='"+.@cuenta$+"';");
+	query_sql("UPDATE login SET `group_id` = "+.@nivel+" WHERE `userid`='"+.@cuenta$+"';");
+	next;
+	query_sql("SELECT `vip_until`, `group_id` FROM login WHERE `userid` = '"+.@cuenta$+"';",.@fechaActual$,.@tipo);
+	sleep2 600;
+	mes "Expiracion actual: "+.@fechaActual$;
+	sleep2 600;
+	mes "Tipo: "+$@vip_ranks$[.@tipo];
+	mes "";
+	sleep2 1000;
+	mes "Listo !";
+	close;
+break;
+
+case 2:
+	mes "Que cuenta?";
+	next;
+	input .@cuenta$;
+	query_sql("SELECT `assist` FROM login WHERE `userid` = '"+.@cuenta$+"';",.@fechaActual$);
+	mes "Expiracion actual: "+.@fechaActual$;
+	if(select("Modificar","Cancelar") == 2) break;
+	L_ASIB:
+	next;
+	mes "Dia"; 
+	input .@dia; if (.@dia > 31) { dispbottom "Fecha incorrecta detectada."; goto L_ASIB;} next;
+	mes "Mes";
+	input .@mes; if (.@mes > 12) { dispbottom "Fecha incorrecta detectada."; goto L_ASIB;} next;
+	mes "Año";
+	input .@anio; if (.@anio > 2020 || .@anio < 2000) { dispbottom "Fecha incorrecta detectada."; goto L_ASIB;}
+	.@date_mod$ = .@anio+"-"+.@mes+"-"+.@dia;
+	query_sql("UPDATE login SET `assist` = '"+.@date_mod$+"' WHERE `userid`='"+.@cuenta$+"';");
+	next;
+	query_sql("SELECT `assist` FROM login WHERE `userid` = '"+.@cuenta$+"';",.@fechaActual$);
+	sleep2 1000;
+	mes "Expiracion actual: "+.@fechaActual$;
+	mes "";
+	sleep2 1200;
+	mes "Listo !";
+	close;
+
+break;
+} close; break;
+}
+
+
+}

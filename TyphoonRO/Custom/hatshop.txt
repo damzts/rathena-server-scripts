@@ -1,0 +1,214 @@
+-	script	PoringConf	-1,{
+OnPCLoginEvent:
+set tengohatprob,0;
+end;
+
+OnInit:
+	set $@zoc, 0; // Zeny, Cash Point o usar otra moneda (items) [0 - Usar otras monedas, ver $@monedaid | 1 - Usar #CASHPOINTS | 2 - Usar Zenys]
+
+	set $@monedaid, 7539; // ID de la moneda a usar, por defecto id 7539 = Poring Coin
+
+	setarray $@itemspc[0], 5132, // ID de los items
+						5386,
+						5012,
+						5023,
+						5024,
+						5025,
+						5026,
+						5028,
+						5029,
+						5030,
+						5031,
+						5032,
+						5033,
+						5034,
+						5035,
+						5036,
+						5037,
+						5038,
+						5039,
+						5040,
+						5041,
+						5042,
+						5043,
+						5045,
+						5046,
+						5047,
+						5048,
+						5049,
+						5050,
+						5057,
+						5052,
+						5187,
+						5191,
+						5192,
+						5193,
+						5194,
+						5195,
+						18503;
+						
+	setarray $@preciospc[0], 700, // Precio de los ID [Según valor de $@zoc = 0 - Usar monedas como Poring Coin (item) | $@zoc = 1 - Valor en Cash Points | $@zoc = 2 - Valor en Zeny]
+							300, // Debe coincidir el precio que quieres
+							100, // Con la posición del array donde lo coloques
+							500, // <- Por ejemplo este precio es para la id 25003
+							120,
+							160,
+							700,
+							600,
+							400,
+							400,
+							350,
+							600,
+							420,
+							180,
+							250,
+							80,
+							90,
+							850,
+							300,
+							500,
+							430,
+							600,
+							200,
+							650,
+							500,
+							300,
+							900,
+							180,
+							680,
+							680,
+							700,
+							780,
+							680,
+							680,
+							680,							680,							680,
+							3800;
+							
+end;
+}
+
+// NPC
+prontera,146,161,5	script	Poring Shop	909,{
+set .@nombre$, "[^FF0000Poring Shop^000000]";
+mes .@nombre$;
+if (tengohatprob == 1){mes "You need to wait 15 seconds."; close;}
+mes "Hola, ¿Quieres comprar en la Poring Shop?";
+next;
+if (select("Sí:No") == 2) close;
+for (set .@c, 0; .@c < getarraysize($@itemspc); set .@c, .@c + 1)
+	set .@menu$, .@menu$ + getitemname($@itemspc[.@c]) + " -> ^FF0000" + $@preciospc[.@c] + " " + getitemname($@monedaid) + "s^000000." + ":";
+mes .@nombre$;
+mes "Elige el item que quieras comprar, también puedes probarlo.";
+next;
+set .@pos, select(.@menu$);
+mes .@nombre$;
+mes "¿Qué quieres hacer ahora?";
+next;
+switch (select("Probarme el item:Comprarlo:Salir")) {
+	case 1:
+		mes .@nombre$;
+		mes "Ya lo tienes probándolo en este momento, compruébalo y cierra la ventana para quitar la vista previa.";
+		addtimer 15000,strnpcinfo(3)+"::OnCerrar";
+		set tengohatprob,1;
+		switch (getiteminfo($@itemspc[.@pos - 1],5)) {
+			case 256: // Top Headgear
+				set @eqid, getequipid(EQI_HEAD_TOP);
+				unequip EQI_HEAD_TOP;
+				changelook 5, getiteminfo($@itemspc[.@pos - 1],11);
+				set @i, 1;
+				break;
+
+			case 512: // Mid Headgear
+				set @eqid, getequipid(EQI_HEAD_MID);
+				unequip EQI_HEAD_MID;
+				changelook 4, getiteminfo($@itemspc[.@pos - 1],11);
+				set @i, 2;
+				break;
+
+			case 1: // Low Headgear
+				set @eqid, getequipid(EQI_HEAD_LOW);
+				unequip EQI_HEAD_LOW;
+				changelook 3, getiteminfo($@itemspc[.@pos - 1],11);
+				set @i, 3;
+				break;
+
+			default:
+				mes "^FF0000Este objeto no se puede probar...^000000";
+				close;
+		} // End switch
+		dispbottom "Te estás probando el item " + getitemname($@itemspc[.@pos - 1]) + ", tienes 15 segundos.";
+		close;
+		OnCerrar:
+		set tengohatprob,0;
+		switch (@i) {
+			case 1:
+				changelook 5, 0;
+				equip @eqid;
+				break;
+
+			case 2:
+				changelook 4, 0;
+				equip @eqid;
+				break;
+
+			case 3:
+				changelook 3, 0;
+				equip @eqid;
+				break;
+
+			default:
+				break;
+		} // End switch
+		deltimer strnpcinfo(3)+"::OnCerrar";
+		set @i, 0;
+		set @eqid, 0;
+		end;
+		break;
+
+	case 2:
+		mes .@nombre$;
+		switch ($@zoc) {
+			case 0: // Usar monedas (items)
+				if (countitem($@monedaid) < $@preciospc[.@pos - 1])
+					mes "Lo siento pero no tienes suficientes ^FF0000" + getitemname($@monedaid) + "^000000.";
+				else {
+					mes "Aquí tienes tu item.";
+					getitem $@itemspc[.@pos - 1],1;
+					delitem $@monedaid, $@preciospc[.@pos - 1];
+				} // End if
+				break;
+				
+			case 1: // Usar CashPoints
+				if (#CASHPOINTS < $@preciospc[.@pos - 1])
+					mes "Lo siento pero no tienes suficientes ^FF0000Cash Points^000000.";
+				else {
+					mes "Aquí tienes tu item.";
+					getitem $@itemspc[.@pos - 1],1;
+					set #CASHPOINTS, #CASHPOINTS - $@preciospc[.@pos - 1];
+				} // End if
+				dispbottom "Tienes " + #CASHPOINTS + " Cash Points.";
+				break;
+				
+			case 2: // Usar Zeny
+				if (Zeny < $@preciospc[.@pos - 1])
+					mes "Lo siento pero no tienes suficientes ^FF0000Zeny^000000.";
+				else {
+					mes "Aquí tienes tu item.";
+					getitem $@itemspc[.@pos - 1],1;
+					set Zeny, Zeny - $@preciospc[.@pos - 1];
+				} // End if
+				break;
+				
+			default:
+				mes "Ha habido un error, no se ha detectado el tipo de moneda para comprar, avisa a un administrador.";
+				close;
+		} // End switch
+		break;
+
+	case 3:
+		mes .@nombre$;
+		mes "Vuelve cuando quieras.";
+		break;
+} // End switch
+close;
+} // End Script

@@ -1,0 +1,261 @@
+prontera,139,169,6	script	Coliseo de campeones	4_M_REIDIN_KURS,{
+mes "Hola !, mi nombre es Reidin!";
+mes " ";
+mes "Busco guerreros capaces de completar un reto sin precedentes.";
+mes "Dime, crees que tienes lo que hace falta?";
+next;
+if(select("Si","No") == 2){ mes "Estare aqui un buen rato, ven te sientas listo." ;close;}
+mes "Muy bien !";
+mes " "; sleep2 250;
+mes "Te enviare a la sala de espera."; next;
+warp("valkyrie", 49, 26); end;
+}
+
+coliseum,0,0,0	script	verificador#23446	-1,{
+end;
+	
+
+OnClearColiseo:
+killmonsterall "coliseum";
+if ($@r != 21) {
+	announce "Parece que no hay nadie en el coliseo..",bc_all,"0xffff00";
+	sleep 4500;
+	announce "Limpiaremos el mapa y cancelaremos el evento, hasta la proxima!",bc_all,"0xffff00"; 
+	end;
+} else
+			mapannounce "coliseum","Nos vemos !",bc_all,0x00FF00; 
+			mapwarp "coliseum","prontera",157,176;
+			sleep 4000;
+			announce "Felicidades a los que completaron el Coliseo!",bc_all,"0xffff00";
+	disablenpc "Entrega de Premios#1232";
+	disablenpc "Portal Coliseo#12318";
+	$@r = 0;
+end;
+}
+
+valkyrie,49,66,0	script	Portal Coliseo#12318	45,2,2,{
+end;
+OnTouch:
+			warp "coliseum",149,150;
+end;
+}
+
+coliseum,149,150,5	script	Entrega de Premios#1232	72,{
+	mes "Felicidades !";
+	mes "has completado "+($@r-1)+" rondas!";
+	next;
+	if ($@r == 21){
+		mes "Aqui tienes tu premio !";
+		close2;
+		getitem 13813,3;
+		getitem 14533,3;
+		getitem 13995,3;
+		getitem 13534,3;
+		getitem 7539,90;
+		#HEROISM += 600;
+		#CASHPOINTS += 9;
+		warp "prontera",156,223;
+		if (getmapusers("coliseum")) end;
+	donpcevent "verificador#23446::OnClearColiseo";
+	}
+	
+	
+	mes "Quieres recibir tu premio y salir?";
+	next;
+	if (select("Continuar:Salir") == 1) {
+		mes "Buena suerte !";
+		close;
+	} else 
+		mes "Aqui tienes.";
+		mes "Te lo mereces !";
+	switch($@r){
+		default: mes "Bug, Exploit? Reportalo a la administracion."; break;
+		case 6:
+		getitem 13813,1;
+		getitem 14533,1;
+		getitem 13534,1;
+		getitem 13995,1;
+		getitem 7539,30;
+		#HEROISM += 200;
+		#CASHPOINTS += 3;
+		break;
+		
+		case 11:
+		getitem 14533,2;
+		getitem 13813,2;
+		getitem 13995,2;
+		getitem 13534,2;
+		getitem 7539,60;
+		#HEROISM += 400;
+		#CASHPOINTS += 6;
+		break;
+	}
+	close2;
+	warp "prontera",156,223;
+	if (getmapusers("coliseum")) end;
+	donpcevent "verificador#23446::OnClearColiseo";
+}
+
+
+coliseum,155,152,0	script	coliseo	-1,{
+OnWhisperGlobal:
+if (getgroupid() < 90) end;
+OnHour21:
+OnHour18:
+OnHour15:
+killmonsterall "coliseum";
+// $@r = select("1:2:3:4:5:6:7:8:9:10:11:12:13:14:15:16:17:18:19:20");
+	enablenpc "Portal Coliseo#12318";
+	// 
+	announce "Se ha abierto el Coliseo de Campeones!",bc_all,"0xffff00";
+	sleep 3000;
+	announce "Si quieren participar entren al portal que esta dentro la sala de espera al final del pasillo.",bc_all,"0xffff00";
+	sleep 3800;
+	announce "La entrada a la sala esta en Prontera [139,169].",bc_all,"0xffff00"; 
+	sleep 5000;
+	announce "Tienen 1 minuto para entrar",bc_all,"0xffff00";
+	sleep 30000; //30 s
+	announce "El portal se cerrara en 30 Segundos",bc_all,"0xffff00";
+	sleep 25000; //25 s
+	announce "El portal se cerrara en ~5~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	announce "El portal se cerrara en ~4~",bc_all,"0xffff00";
+	sleep 1000;// 1 s
+	announce "El portal se cerrara en ~3~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	announce "El portal se cerrara en ~2~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	announce "El portal se cerrara en ~1~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	disablenpc "Portal Coliseo#12318";
+	$@r = 1;
+	sleep 3000; //1 s
+	recargar:
+	if (!getmapusers("coliseum"))
+	donpcevent "verificador#23446::OnClearColiseo";
+	else deletearray($@mobs);
+	switch($@r){
+		case 1: setarray $@mobs[0],1086,1,1054,15,1053,15,1051,15,1048,5; 
+		mapannounce "coliseum","Comenzaremos con el evento... primero les explicare de que se trata. ",bc_map,"0xffff00";
+			sleep 6000; //6s
+		mapannounce "coliseum","El evento consta de 20 rondas en cada una aparecera uno o dos MVP y su horda de monstruos, matenlos a todos para pasar a la siguiente ronda",bc_map,"0xffff00";
+			sleep 6000; //6s
+		mapannounce "coliseum","Al el final de cada 5 rondas, 10 en mayores rondas recibiran un premio, luchen y sobrevivan!",bc_map,"0xffff00";
+			sleep 12000;
+		mapannounce "coliseum","Bien comenzemos.. mucha suerte!",bc_map,"0xffff00";
+		break;
+		case 2: setarray $@mobs[0],1059,1,1303,25,1053,15,1004,25; break;
+		case 3: setarray $@mobs[0],1147,1,1159,1,1105,20,1160,15,1095,15,1097,5; break;
+		case 4: setarray $@mobs[0],1112,1,1071,90; break;
+		case 5: setarray $@mobs[0],1150,1,1307,15,1180,25; break;
+		case 6: setarray $@mobs[0],1630,1,1416,35; break;
+		case 7: setarray $@mobs[0],1312,1,1319,10,1316,10,1318,10,1314,10; break;
+		case 8: setarray $@mobs[0],1492,1,1401,10,1405,10,1403,5,1404,10,1400,5; break;
+		case 9: setarray $@mobs[0],1038,1,1297,15,1032,15,1041,20; break;
+		case 10: setarray $@mobs[0],1157,1,1511,1,1098,10,1140,10,1146,10; break;
+		case 11: setarray $@mobs[0],1148,25,1418,1,1029,15,1037,15; break;
+		case 12: setarray $@mobs[0],1658,1,1046,1,1654,10,1653,10,1657,10,1656,10,1655,10,1652,10; break;
+		case 13: setarray $@mobs[0],1785,1,1783,20; break;
+		case 14: setarray $@mobs[0],1087,1,1190,1,1686,20,1213,15,1189,10,1273,10,1023,5; break;
+		case 15: setarray $@mobs[0],1039,1,1101,25,1582,8,1109,15,1272,1,1302,10; break;
+		case 16: setarray $@mobs[0],1871,1,1870,18; break;
+		case 17: setarray $@mobs[0],1832,1,1833,18,1831,18; break;
+		case 18: setarray $@mobs[0],1751,1,1702,10,1703,10,1371,10; break;
+		case 19: setarray $@mobs[0],1873,1,1035,30,1042,5,1091,5,1011,5; break;
+		case 20: setarray $@mobs[0],1956,1,1957,1,1958,1,1960,1,1961,1,1958,1,1960,1,1960,1,1958,1,1959,1,1960,1,1958,1,1961,1,1961,1,1958,1,1960,1,1959,1,1958,1,1960,1,1958,1,1961,1,1958,1; break;
+	}
+	if ($@r < 15)
+		mapannounce "coliseum","~~~~~~~~~ "+getmonsterinfo($@mobs[0],MOB_NAME)+""+(($@r == 14 || $@r == 12 || $@r == 10 || $@r == 3)?" y "+getmonsterinfo($@mobs[2],MOB_NAME):"")+" ~~~~~~~~~",bc_map,"0xFF0000"; 
+	else
+		mapannounce "coliseum","~~~~~~~~~ "+getmonsterinfo($@mobs[0],MOB_NAME)+""+(($@r == 20)?" y "+getmonsterinfo($@mobs[2],MOB_NAME):"")+" ~~~~~~~~~",bc_map,"0xFF0000";
+	sleep 5000;
+		for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,"--ja--", $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+end;
+
+OnMonstruoMuerto:
+if (!getmapusers("coliseum")) end;
+set $@mobs_cl,mobcount("coliseum","coliseo::OnMonstruoMuerto");
+if ($@mobs_cl)
+	mapannounce "coliseum",""+(($@mobs_cl >= 2)?"Quedan " + $@mobs_cl + " monstruos para pasar a la siguiente ronda":"Queda un monstruo para pasar a la siguiente ronda!")+"",bc_map,"0xffff00";
+else if (!$@mobs_cl){
+	mapannounce "coliseum","¡¡Todos los monstruos han sido eliminados!!",bc_map,"0xffff00";
+	$@r++;
+if ($@r == 6 || $@r == 11 || $@r == 21) {
+	mapannounce "coliseum","Han completado "+($@r-1)+" rondas!! el NPC de entrega de premios ha aparecido en el centro del mapa",bc_all,0x00FF00;
+
+	enablenpc "Entrega de Premios#1232";
+	sleep 3000;
+		mapannounce "coliseum","Tienen 1 minuto desde ahora para recojer su premio y retirarse",bc_all,0x00FF00;
+		sleep 5000;
+		if ($@r < 20) mapannounce "coliseum","O tambien pueden jugarsela para ganar un premio mayor! ustedes deciden.. TODO o NADA!",bc_all,0x00FF00;
+		sleep 25000;
+		mapannounce "coliseum","Quedan 30 segundos desde ahora para recojer su premio y retirarse",bc_all,0x00FF00;
+		sleep 25000;
+		mapannounce "coliseum","5 Segundos!",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 4 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 3 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 2 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 1 ~",bc_all,0x00FF00;
+		sleep 1000;
+		disablenpc "Entrega de Premios#1232";
+		mapannounce "coliseum","El NPC ha desaparecido, suerte para los que quedaron!",bc_all,0x00FF00;
+		sleep 4000;
+	mapannounce "coliseum","Ahora los curare completamente y tendremos 15 segundos de descanso para la siguiente oleada",bc_all,0x00FF00;
+	areapercentheal "coliseum",129,131,170,170,100,100;
+	sleep 10000;
+		mapannounce "coliseum","5 Segundos!",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 4 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 3 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 2 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","~ 1 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "coliseum","Siguiente MVP!",bc_all,0x00FF00;
+	} mapannounce "coliseum","Preparense para la siguiente ronda! ",bc_map,"0xffff00";  sleep 1500; goto recargar;
+	
+
+} end;
+
+OnPCLogoutEvent:
+getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+if (!.@mapnvz$ == "coliseum") end;
+if (!getmapusers("coliseum") && $@r > 0)
+	donpcevent "verificador#23446::OnClearColiseo";
+end;
+
+OnPCDieEvent:
+getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+if ( .@mapnvz$ == "coliseum") {
+	sleep2 500;
+	warp "prontera",156,223;
+		percentheal 100,100;
+		dispbottom "Que lastima has muerto..";
+	
+}
+
+OnInit:
+	disablenpc "Portal Coliseo#12318";
+	disablenpc "Entrega de Premios#1232";
+end;
+}
+
+//= Mapflags ==============================================
+coliseum	mapflag	nowarpto
+coliseum	mapflag	nomemo
+coliseum	mapflag	nopenalty
+coliseum	mapflag	noteleport
+coliseum	mapflag	nosave
+coliseum	mapflag	noloot
+coliseum	mapflag	bexp	150
+coliseum	mapflag	jexp	150
+coliseum	mapflag	monster_noteleport
+coliseum	mapflag	nobranch
+//=========================================================

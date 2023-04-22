@@ -1,0 +1,630 @@
+guild_vs5,50,50,5	script	Entrega de Premios#1232	72,{
+if ($@r == 6){
+mes "Vaya, has completado las 5 rondas!...";
+next;
+}
+
+if ($@r == 11){
+mes "Vaya, has completado otras 5 rondas!, Genial!";
+next;
+}
+
+if ($@r == 21){
+mes "Felicidades has completado todas las rondas, eres un Excelente Campeon!";
+close2;
+getitem 13813,3;
+getitem 12208,3;
+getitem 13995,3;
+getitem 13534,3;
+getitem 7539,150;
+getitem 26021,20;
+warp "prontera",156,223;
+end;
+} //Fin de Premios 3ra Oleada
+
+mes "Te dare las opciones ^^";
+switch(select("Continuar en el Coliseo:Tomar Premio y Salir")) {
+case 1:
+next;
+mes callfunc("F_SexMes","Asi se habla Guerrera!!","Asi se habla Guerrero!!");
+close;
+break;
+case 2:
+mes callfunc("F_SexMes","Uhh.. y creia que eras una buena Guerrera...","Uhh.. y creia que eras un buen Guerrero...");
+if ($@r == 6){
+getitem 13813,1;
+getitem 12208,1;
+getitem 13534,1;
+getitem 13995,1;
+getitem 26021,5;
+getitem 7539,40;
+} //Premios 1ra Oleada
+
+if ($@r == 11){
+getitem 12208,2;
+getitem 13813,2;
+getitem 13995,2;
+getitem 13534,2;
+getitem 26021,10;
+getitem 7539,80;
+} //Premios 2da Oleada
+
+	close2;
+	warp "prontera",156,223;
+break;
+}
+}
+
+comodo,204,138,0	script	Portal Coliseo#12318	45,2,2,{
+end;
+OnTouch:
+			warp "guild_vs5",0,0;
+end;
+}
+
+guild_vs5,0,0,0	script	verificador#23446	-1,{
+
+ OnInit:
+ 	do {
+			if ($@r == 21 ){
+			if ($@colis == 0){
+			if ($inir == 0){
+				sleep 120000;
+				}
+			if ($inir == 1 || $inir == 2){
+				sleep 30000;
+			}
+				mapwarp "guild_vs5","prontera",156,223;
+				set $@colis,1;
+			sleep 5000;
+			announce "Felicidades a los que completaron el Coliseo!",bc_all,"0xffff00";
+			end;
+			}
+		}
+		
+		if ($@r == 1){
+		if ($inir == 0)
+		sleep 82000;
+		if ($inir == 1 || $inir == 2)
+		sleep 45000;
+		if (getmapusers("guild_vs5") < 1 && ($@r == 1) ){
+		announce "Parece que no hay nadie en el evento..",bc_all,"0xffff00";
+		sleep 3800;
+		announce "Limpiaremos el mapa y cancelaremos el evento, hasta la proxima!",bc_all,"0xffff00"; 
+		killmonsterall "guild_vs5";
+		disablenpc "verificador#23446";
+		end;
+		}
+		}
+		
+		if (getmapusers("guild_vs5") < 1 && $@r > 1 && $@r <= 20 ){
+		sleep 4500;
+		announce "Parece que no queda nadie en el evento..",bc_all,"0xffff00";
+		sleep 4500;
+		announce "Limpiaremos el mapa y cancelaremos el evento, hasta la proxima!",bc_all,"0xffff00"; 
+		killmonsterall "guild_vs5";
+		disablenpc "verificador#23446";
+		end;
+		}
+
+	sleep 500; // Evita el salto super infinito y previene transacciones innecesarias
+	} while(1); // Termina el salto
+end;
+}// Fin del script
+
+-	script	coliseo	-1,{
+OnPCDieEvent:
+getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+if ( .@mapnvz$ == "guild_vs5") {
+	sleep2 500;
+	warp "prontera",156,223;
+		percentheal 100,100;
+		dispbottom "Que lastima has muerto..";
+	
+} 
+end;
+
+OnWhisperGlobal:
+if ( getgmlevel() < 90 ) // Si el nivel de cuenta del invocador es menor se ejecuta la siguiente linea y no pasa nada sino la salta.
+end;
+mes "Este es el Panel de Control";
+mes "del Coliseo de Campeones";
+next;
+L_Menu:
+mes "Elije una opci?n";
+if ($inir == 0)
+mes "Inicios Rapidos: ^FF0000Desactivados^000000";
+if ($inir == 1)
+mes "Inicio Rapido: ^3CFF00Activado^000000";
+if ($inir == 2)
+mes "Inicio Turbo (Debug): ^3CFF00Activado^000000";
+
+switch(select("Iniciar Coliseo de Campeones:Activar Inicio Rapido:Activar Inicio Turbo (Debug):Desactivar Inicios Rapidos")) {
+case 1:
+mes "Ahora mismo ^^";
+close2;
+goto iniciar;
+break;
+
+case 2:
+mes "Hecho ^^";
+close2;
+set $inir,1;
+goto L_Menu;
+break;
+
+case 3:
+mes "Listo ^^";
+close2;
+set $inir,2;
+goto L_Menu;
+break;
+
+case 4:
+mes "Listo ^^";
+close2;
+set $inir,0;
+goto L_Menu;
+break;
+}
+
+OnHour21:
+OnHour18:
+OnHour15:
+iniciar:
+set $@r,0;
+recargar:
+switch($@r){
+	case 1:
+	set $@colis,0;
+	set $@r,0;
+	sleep 1000;
+	set $@r,$@r+1;
+
+	disablenpc "verificador#23446";
+	enablenpc "Portal Coliseo#12318";
+	
+	if ($inir == 0){
+	announce "Ha comenzado el Coliseo de Campeones!",bc_all,"0xffff00";
+	sleep 3000;
+	announce "Si quieren participar entren al portal que esta en la ciudad de Comodo [204,138]",bc_all,"0xffff00";
+	sleep 3800;
+	announce "Tienen 1 minuto para entrar",bc_all,"0xffff00";
+	sleep 30000; //30 s
+	announce "El portal se cerrara en 30 Segundos",bc_all,"0xffff00";
+	sleep 25000; //25 s
+	}
+	
+	if ($inir == 2){
+	announce "Ha comenzado el Coliseo de Campeones en modo turbo (debug)!",bc_all,"0xffff00";
+	}
+	
+	if ($inir == 1){
+	announce "Ha comenzado el Coliseo de Campeones en modo rapido!",bc_all,"0xffff00";
+	sleep 3000;
+	announce "Tienen 30 segundos para entrar al portal que esta en la ciudad de Comodo [204,138]",bc_all,"0xffff00";
+	sleep 25000;
+	}
+	
+	if ($inir == 0 || $inir == 1 ){
+	announce "El portal se cerrara en ~5~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	announce "El portal se cerrara en ~4~",bc_all,"0xffff00";
+	sleep 1000;// 1 s
+	announce "El portal se cerrara en ~3~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	announce "El portal se cerrara en ~2~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	announce "El portal se cerrara en ~1~",bc_all,"0xffff00";
+	sleep 1000; //1 s
+	}
+	announce "El Coliseo de Campeones ha comenzado!!",bc_all,0x00FF00;
+	disablenpc "Portal Coliseo#12318";
+	if ($inir == 0){
+	sleep 5000;
+	}
+
+	if ($inir == 0){
+	mapannounce "guild_vs5","Comenzaremos con el evento... primero les explicare de que se trata. ",bc_map,"0xffff00";
+	sleep 6000; //6s
+	mapannounce "guild_vs5","El evento consta de 15 rondas en cada una aparecera un MVP y su Horda de monstruos, Matenlos a todos para pasar a la siguiente ronda",bc_map,"0xffff00";
+	sleep 6000; //6s
+	mapannounce "guild_vs5","Asi al final de cada 5 rondas recibiran un premio, Luchen y Sobrevivan!",bc_map,"0xffff00";
+	sleep 12000;
+	mapannounce "guild_vs5","Bien Comenzemos.. Suerte!",bc_map,"0xffff00";
+	sleep 12000;
+	}
+	
+	// Si no esta desactivado en modo debug puede causar problemas.
+	if ($inir == 0 || $inir == 1){
+	enablenpc "verificador#23446";
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Golden Thief Bug ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1086,1,1054,15,1053,15,1051,15,1048,5;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 2:
+	if ($inir == 0){sleep 5000;}
+	mapannounce "guild_vs5","~~~~~~~~~ Mistress ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){sleep 5000;}
+	deletearray($@mobs);
+	setarray $@mobs[0],1059,1,1303,25,1053,15,1004,25;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+
+	case 3:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Maya y Phreeoni ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1147,1,1159,1,1105,20,1160,15,1095,15,1097,5;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 4:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Drake ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1112,1,1071,90;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 5:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Cat o' Nine Tails ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1150,1,1307,15,1180,25;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 6:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ White Lady ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1630,1,1416,35;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 7:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Turtle General ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1312,1,1319,10,1316,10,1318,10,1314,10;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 8:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Samurai Specter ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}	
+	deletearray($@mobs);
+	setarray $@mobs[0],1492,1,1401,10,1405,10,1403,5,1404,10,1400,5;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";	monster	"guild_vs5",0,0,"Samurai Specter",,"coliseo::OnMonstruoMuerto";
+	break;
+	
+	case 9:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Osiris ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1038,1,1297,15,1032,15,1041,20;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 10:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Pharaoh y Amon Ra ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1157,1,1511,1,1098,10,1140,10,1146,10;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 11:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Evil Snake Lord ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1148,25,1418,1,1029,15,1037,15;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 12:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Egnigem Cenia y Doppelganger ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1658,1,1046,1,1654,10,1653,10,1657,10,1656,10,1655,10,1652,10;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 13:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Atroce ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1785,1,1783,20;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 14:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Orc Hero y Orc Lord ~~~~~~~~~",bc_map,"0xffff00";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1087,1,1190,1,1686,20,1213,15,1189,10,1273,10,1023,5;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 15:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Baphomet ~~~~~~~~~",bc_map,"0xFF0000";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1039,1,1101,25,1582,8,1109,15,1272,1,1302,10;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 16:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Falling Bishop Hibram ~~~~~~~~~",bc_map,"0xFF0000";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1871,1,1870,18;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 17:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Ifrit ~~~~~~~~~",bc_map,"0xFF0000";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1832,1,1833,18,1831,18;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 18:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Valkyrie Randgris ~~~~~~~~~",bc_map,"0xFF0000";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1751,1,1702,10,1703,10,1371,10;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 19:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Beelzebub ~~~~~~~~~",bc_map,"0xFF0000";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1873,1,1035,30,1042,5,1091,5,1011,5;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+	
+	case 20:
+	if ($inir == 0){
+	sleep 5000;
+	}
+	mapannounce "guild_vs5","~~~~~~~~~ Nacht Sieger y su mano derecha Entweihen ~~~~~~~~~",bc_map,"0xFF0000";
+	if ($inir == 0){
+	sleep 5000;
+	}
+	deletearray($@mobs);
+	setarray $@mobs[0],1956,1,1957,1,1958,1,1960,1,1961,1,1958,1,1960,1,1960,1,1958,1,1959,1,1960,1,1958,1,1961,1,1961,1,1958,1,1960,1,1959,1,1958,1,1960,1,1958,1,1961,1,1958,1;
+	for (.@i = 0; .@i < getarraysize($@mobs); .@i++)
+	areamonster "coliseum", 129,135, 169,169,getmonsterinfo($@mobs[.@i],0), $@mobs[.@i], $@mobs[.@i+1], strnpcinfo(3) +"::OnMonstruoMuerto";
+	break;
+}
+
+OnMonstruoMuerto:
+set $@mobs_muertos_coli,mobcount("guild_vs5","coliseo::OnMonstruoMuerto"); // Esto cuenta los mobs muertos y los muestra y usa en varias zonas.
+		
+		if ($@mobs_muertos_coli > 1){ // Si hay mas de un monstruo
+		mapannounce "guild_vs5","Quedan " + $@mobs_muertos_coli + " monstruos para pasar a la siguiente ronda",bc_map,"0xffff00";
+		} else if ($@mobs_muertos_coli == 1){ // Cuando queda solo un monstruo =)
+		mapannounce "guild_vs5","Queda 1 monstruo para pasar a la siguiente ronda!",bc_map,"0xffff00";
+		} else { // Si hay 0 monstruos
+		mapannounce "guild_vs5","¡¡Todos los monstruos han sido eliminados!!",bc_map,"0xffff00";
+		if ($inir == 0 || $inir == 1){
+		sleep 3800;
+		}
+		if ($@r < 21 ){
+		if (($@r > 1 && $@r < 5) || ($@r > 6 && $@r < 10) || ($@r > 11 && $@r < 20)){ // Anuncia solamente cuando lo siguiente es otra ronda y no entrega de premios =)
+		mapannounce "guild_vs5","Preparense para la siguiente ronda! ",bc_map,"0xffff00";
+		}
+		if ($inir == 0 || $inir == 1){
+		sleep 3800;
+		}
+		}
+		set $@r,$@r+1;
+	if ($@r == 6 || $@r == 11 || $@r == 21 ){
+	if ($@r == 6 ){
+	mapannounce "guild_vs5","Han completado 5 rondas!! el NPC de entrega de premios ha aparecido en el centro del mapa",bc_all,0x00FF00;
+	}
+	if ($@r == 11 ){
+			mapannounce "guild_vs5","Han completado 10 rondas!! el NPC de entrega de premios ha aparecido en el centro del mapa",bc_all,0x00FF00;
+	}
+	if ($@r == 21 ){
+	mapannounce "guild_vs5","Han completado todas las rondas!! el NPC de entrega de premios ha aparecido en el centro del mapa",bc_all,0x00FF00;
+	}
+	
+		enablenpc "Entrega de Premios#1232";
+		if ($inir == 0 || $inir == 1){
+		sleep 3200;
+		}
+		
+		if ($inir == 0){
+		mapannounce "guild_vs5","Tienen 2 Minutos desde ahora para recojer su premio y retirarse",bc_all,0x00FF00;
+		}
+		if ($inir == 1){
+		mapannounce "guild_vs5","Tienen 30 Segundos desde ahora para recojer su premio y retirarse",bc_all,0x00FF00;
+		}
+		sleep 3800;
+		if ($@r == 21 ){end;}
+		
+			if ($@r <= 20 ){ // Si las rondas son menores al final.
+			mapannounce "guild_vs5","O pueden jugarsela para ganar un premio mayor! ustedes deciden.. Todo o Nada!",bc_all,0x00FF00;
+			}
+		if ($inir == 0){
+		sleep 111000;
+		}
+		if ($inir == 0 || $inir == 1){
+		sleep 25000;
+		}
+		sleep 1000;
+		mapannounce "guild_vs5","5 Segundos!",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 4 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 3 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 2 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 1 ~",bc_all,0x00FF00;
+		sleep 1000;
+		
+		disablenpc "Entrega de Premios#1232";
+
+		mapannounce "guild_vs5","El NPC ha desaparecido, Suerte para los que quedaron!",bc_all,0x00FF00;
+		sleep 1000;
+		if ($inir == 0 || $inir == 1){
+		mapannounce "guild_vs5","Ahora los curare completamente y tendremos 20 segundos de descanso para la siguiente oleada",bc_all,0x00FF00;
+		sleep 1000;
+		areapercentheal "guild_vs5",20,20,80,80,100,100;
+		sleep 11000;
+		mapannounce "guild_vs5","10 segundos!",bc_all,0x00FF00;
+		sleep 5000;
+		sleep 1000;
+		mapannounce "guild_vs5","5 Segundos!",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 4 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 3 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 2 ~",bc_all,0x00FF00;
+		sleep 1000;
+		mapannounce "guild_vs5","~ 1 ~",bc_all,0x00FF00;
+		}
+		sleep 1000;
+		mapannounce "guild_vs5","Siguiente MVP!",bc_all,0x00FF00;
+	}
+	goto recargar; // Va a re-leer el codigo de aparecer MVP's para que salgan mas monstruos igualmente la etiqueta OnMonstruoMuerto siempre esta activa :P
+
+}
+end;
+OnInit:
+	disablenpc "Portal Coliseo#12318";
+	disablenpc "Entrega de Premios#1232";
+	disablenpc "verificador#23446";
+end;
+}
+
+
+//= Mapflags ==============================================
+guild_vs5	mapflag	nowarpto
+guild_vs5	mapflag	nomemo
+guild_vs5	mapflag	nopenalty
+guild_vs5	mapflag	noteleport
+guild_vs5	mapflag	nosave
+guild_vs5	mapflag	noloot
+guild_vs5	mapflag	bexp	50
+guild_vs5	mapflag	jexp	50
+guild_vs5	mapflag	monster_noteleport
+guild_vs5	mapflag	nobranch
+//=========================================================

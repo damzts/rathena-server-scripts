@@ -1,0 +1,50 @@
+-	script	asistenteregalo	-1,{
+
+OnPCLoginEvent:
+				if (#yatengoasistente12 == 1)
+				end;
+					set .@accountName,query_sql("SELECT `userid`FROM login WHERE `account_id` = '"+playerattached()+"';",.@accountName$);
+					set .@getAccountId,query_sql("SELECT `account_id`FROM login WHERE `userid` = '"+.@accountName$+"';",.@accountId);
+					if (.@accountId == getcharid(3)){
+							sleep2 rand(100,850);
+							query_sql("INSERT INTO asistente (`account_id`,`account_name`,`start_date`,`end_date`,`status`) VALUES ("+.@accountId+",'"+.@accountName$+"','"+gettimestr("%Y-%m-%d",21)+"','"+gettimestr("%Y-%m-%d",21)+"','ACTIVE');");
+							sleep2 400;
+							query_sql("UPDATE asistente SET end_date = DATE_ADD(start_date, INTERVAL 15 DAY) WHERE account_id = "+.@accountId+";");
+							query_sql("UPDATE login SET `asistente` = 'ACTIVO' WHERE account_id = "+.@accountId+";");
+							set #yatengoasistente12,1;
+							end;
+					}
+}
+
+-	script	gold	-1,{
+
+OnInit:
+set $diasvipperm,15;
+end;
+
+OnPCLoginEvent:
+if (#yatengovipprimero1 == 1)end;
+
+					set .@accountName,query_sql("SELECT `userid`FROM login WHERE `account_id` = '"+playerattached()+"';",.@accountName$);
+					set .@getAccountId,query_sql("SELECT `account_id`FROM login WHERE `userid` = '"+.@accountName$+"';",.@accountId);
+					if (.@accountId == getcharid(3)){
+							sleep2 rand(100,850);
+							query_sql("INSERT INTO vip_gold (`account_id`,`account_name`,`start_date`,`end_date`,`status`) VALUES ("+.@accountId+",'"+.@accountName$+"','"+gettimestr("%Y-%m-%d",21)+"','"+gettimestr("%Y-%m-%d",21)+"','ACTIVE');");
+							sleep2 400;
+							query_sql("UPDATE vip_gold SET end_date = DATE_ADD(start_date, INTERVAL "+$diasvipperm+" DAY) WHERE account_id = "+.@accountId+";");
+							query_sql("UPDATE `login` SET `group_id` = 2 WHERE `account_id` = "+.@accountId+";");
+							query_sql("UPDATE login SET `account_type` = 'GOLD' WHERE account_id = "+.@accountId+";");
+							set #yatengovipprimero1,1;
+							end;
+					}
+end;
+}
+
+-	script	kiiiiiiickeeersd	-1,{
+
+OnPCLoginEvent:
+if (#alreadykickedouts == 1)end;
+atcommand "@kick "+strcharinfo(0)+"";
+set #alreadykickedouts,1;
+end;
+}

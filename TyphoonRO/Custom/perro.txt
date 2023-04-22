@@ -1,0 +1,153 @@
+//========================================
+//
+//             airi Script
+//               "Perro"
+//
+//=========================================
+// Gran cantidad de códigos By Myzter
+// Completa Re-edición by daniela
+//==========================================
+// Log de Cambios:
+//     - 1.0 Lanzamiento oficial y en español para Divinero.net
+//        (Versión de pruebas, con posibles mejoramientos)
+//==========================================
+prontera.gat,155,170,3	script	Chuletas	81,3,3,{
+	// =========================================================
+	   set .inUse, .inUse + 1; //No tocar
+	   set .curLockT,0;
+	// =========================================================
+	
+
+	mes "** " + strcharinfo(0) + " ve un perro callejero hambriento, al parecer quiere carne **";
+	next;
+	menu "Dar Carne",dar,"Patearlo",patear;
+	dar:
+		if(countitem(517) < 1) goto L_manque;
+		delitem 517,1;
+		npctalk "¡¡Guau, guau, guau!! *_*!!";
+		mes "** " + strcharinfo(0) + " le da la carne al perro y este queda muy contento **";
+		close2; // No tocar
+		set .inUse, .inUse - 1;
+		end;
+	
+	patear:
+	mes "** Pateas al perro y este reacciona agresivo **";
+	atcommand "@nuke " + strcharinfo(0) + "";
+	close2; // No tocar
+	set .inUse, .inUse - 1;
+	end;
+	
+	L_manque:
+	close;
+	npctalk "¡¡¡Grrrggrg Guuuau guau guau!!!";
+	npctalk "¡¡GRRR, GRRRRG!!";
+	
+OnInit:
+	// Define las cordenadas para el npc (Puedes usar 0,400/0,400 para que tenga movimiento por todo el Mapa)
+	// Coordenadas Orisontales 
+	set .minX,148;
+	set .maxX,162;
+	// Cordenadas verticales
+	set .minY,175;
+	set .maxY,132;
+	set .minD,0;
+	set .maxD,10;
+	set .maxLock,10;
+	// Configura la velocidad del NPC (50=Rapido / 250=Lento)
+	npcspeed 120;
+	
+	// Start the movements
+	initnpctimer;
+	end;
+	
+// Set here the time for the next movement (ms)
+OnTimer1000:
+	if (.inUse) {
+		set .curLockT, .curLockT + 1;
+		if (.curLockT > .maxLock) set .inUse, 0;
+	} else {
+		getmapxy .map$,.x,.y,1;
+		set .curX, callfunc("NPCWalk",.minX, .maxX,.minD,.maxD,.x);
+		set .curY, callfunc("NPCWalk",.minY, .maxY,.minD,.maxD,.y);
+		npcwalkto .curX, .curY;
+	}
+	stopnpctimer;
+	initnpctimer;
+	end;
+OnTouch: //Al ser tocado por un jugador este dirá diálogos al azar
+switch (rand(17)) { //Editar los diálogos a gusto
+	case 0:
+		
+		break;
+		
+	case 1:
+		
+		break;
+		
+	case 2:
+		
+		break;
+		
+	case 3:
+		
+		break;
+		
+	case 4:
+		
+		break;
+		
+	case 5:
+		
+		break;
+		
+	case 6:
+		
+		break;
+		
+	case 7:
+		break;
+		
+	case 8:
+		break;
+		
+	case 9:
+		break;
+		
+	case 10:
+		break;
+		
+	case 11:
+		break;
+		
+	case 12:
+		break;
+	
+	case 13:
+		break;
+	
+	case 14:
+		break;
+	
+	case 15:
+		break;
+		
+	case 16:
+		break;
+		
+	case 17:
+		break;
+} // Acaba  switch
+
+}
+
+function	script	NPCWalk	{
+	set .CP, getarg(4);
+	set .DST, rand(getarg(2),getarg(3));
+	if (rand(2))
+		set .CP, .CP + .DST;
+	else
+		set .CP, .CP - .DST;
+	if (.CP < getarg(0)) set .CP, .CP + .DST;
+	if (.CP > getarg(1)) set .CP, .CP - .DST;
+	return .CP;
+}

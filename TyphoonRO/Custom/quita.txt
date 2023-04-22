@@ -1,0 +1,26 @@
+//-----------------------------------|
+//NPC Hecho por LNPT para DivineRO...|
+//-----------------------------------|
+
+prontera.gat,160,193,4	script	Borrador	405,{
+set @n$,"[Borrador]";
+set @QI$,"^FF9912"+@n$+"^000000";
+
+mes @QI$;
+mes "Hola "+strcharinfo(0)+" Yo soy el Borrador de puntos de Skill de Prontera^^.";
+next;
+mes @QI$;
+mes "¿Deseas que te Quite los Puntos de Skill?.";
+menu "Claro.",si,"No,gracias",no;
+si:
+set SkillPoint,0;
+next;
+mes @QI$;
+mes"listo "+strcharinfo(0)+" fue un gusto ^^";
+close;
+no:
+next;
+mes @QI$;
+mes"Ok "+strcharinfo(0)+" Vuelve cuando Quieras";
+close;
+}

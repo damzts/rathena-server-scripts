@@ -1,0 +1,127 @@
+/*getrandomoptinfo(<type>);
+
+Returns value of an attribute of current random option.
+
+Valid attributes are:
+ROA_ID - ID of current option
+ROA_VALUE - Value field of current option
+ROA_PARAM - Param field of current option
+
+This script command is intended for using in random option scripts.
+
+---------------------------------------
+
+*getequiprandomoption(<equipment index>,<index>,<type>{,<char id>});
+
+Returns value of an attribute of a random option on an equipped item.
+
+See 'getequipid' for a full list of valid equipment slots.
+
+index parameter can be 0 to MAX_ITEM_RDM_OPT-1 (default 0-4).
+
+For valid attribute types, see `getrandomoptinfo` command reference.
+
+---------------------------------------
+
+*setrandomoption(<equipment slot>,<index>,<id>,<value>,<param>{,<char id>});
+
+Sets <index+1>th random option for equipment equipped at <equipment slot>
+to <id>, <value> and <param>.
+
+See 'getequipid' for a full list of valid equipment slots.
+
+index parameter can be 0 to MAX_ITEM_RDM_OPT-1 (default 0-4).
+
+ID - ID of random option. See db/const.txt for constants.
+Value - Value of random option
+Param - Parameter of random option 
+
+
+EQI_ACC_L (0)             - Accessory 1
+EQI_ACC_R (1)             - Accessory 2
+EQI_SHOES (2)             - Footgear (shoes, boots)
+EQI_GARMENT (3)           - Garment (mufflers, hoods, manteaux)
+EQI_HEAD_LOW (4)          - Lower Headgear (beards, some masks)
+EQI_HEAD_MID (5)          - Middle Headgear (masks, glasses)
+EQI_HEAD_TOP (6)          - Upper Headgear
+EQI_ARMOR (7)             - Armor (jackets, robes)
+EQI_HAND_L (8)            - Left hand (weapons, shields)
+EQI_HAND_R (9)            - Right hand (weapons)
+
+
+*/
+
+prontera,146,150,6	script	Jester	4_M_MOCASS1,{
+mes "Te interesaria descubrir los atributos secretos que tiene tu equipo?";
+next;
+D_MENU:
+switch(select("Si:No:Que es eso?:")){
+	case 1:
+	if (countitem(7539) < 150) { mes "Parece que no tienes suficientes poring coins, vuelve cuando tengas suficientes."; close;}
+	else if (!getequipid(3) && !getequipid(7)){ mes "Deberias equiparte alguna armadura/capa para que pueda revisarla.."; close;}
+	mes "Que te gustaria que revisara?";
+	next;
+	switch(select("Armadura - "+getitemname(getequipid(7))+":Capa - "+getitemname(getequipid(3))))
+	{
+		case 1:
+		if (getequiprandomoption(EQI_ARMOR,1,ROA_ID,getcharid(0))) {mes "Esta armadura ya la he revisado antes.."; close;}
+		mes "Seguro?";
+		if(select("Si","No") == 2) break;
+		mes "Dejame revisar entonces...";
+		sleep2 800;
+		mes ".";
+		sleep2 1600;
+		mes "..";
+		sleep2 2400;
+		mes "...";
+		next; 
+		mes "Listo ! ";
+		mes "He descubierto algunos atributos que te podrian ser utiles ! ";
+		for( .@i = 0; .@i <= 2; .@i++ )
+		setrandomoption(EQI_ARMOR,.@i,rand(1,12),rand(1,3),0,getcharid(0));
+		delitem 7539,150;
+		next;
+		mes "Gracias por utilizar mi servicio !";
+		break;
+		
+		case 2: 
+		if (getequiprandomoption(EQI_GARMENT,1,ROA_ID,getcharid(0))) {mes "Esta armadura ya la he revisado antes.."; close;}
+		mes "Seguro?";
+		if(select("Si","No") == 2) break;
+		mes "Dejame revisar entonces...";
+		sleep2 800;
+		mes "...";
+		sleep2 1600;
+		mes ".....";
+		sleep2 2400;
+		mes "........";
+		next; 
+		mes "Listo ! ";
+		mes "He descubierto algunos atributos que te podrian ser utiles ! ";
+		for( .@i = 0; .@i <= 2; .@i++ )
+		setrandomoption(EQI_GARMENT,.@i,rand(1,12),rand(1,3),0,getcharid(0));
+		delitem 7539,150;
+		next;
+		mes "Gracias por utilizar mi servicio !";
+		break;
+		
+	}
+	close;
+	
+	case 2:
+	mes "Muy bien !";
+	close;
+	
+	case 3:
+	mes "Los atributos secretos de tu equipo son nuevos bonos especiales aleatorios que puedes obtener al venir conmigo.";
+	next;
+	mes "Estos efectos son unicos y no tienen nada que ver con enchant, slots de cartas, etc.. solo es un pequeño bono que podrias obtener ;)";
+	next;
+	mes "Puedes encantar tu Capa o Armadura y solo tienes un intento por objeto.";
+	mes "El costo por descubrir los atributos secretos de tu equipo son 150 poring coins.";
+	next;
+	mes "Que quieres hacer?";
+	goto D_MENU;
+}
+
+}

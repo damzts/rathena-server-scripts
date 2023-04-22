@@ -1,0 +1,214 @@
+/* ================================================================
+,--.   ,--.			   ,--.							 ,--.
+|  |   `--' ,---. ,--,--, |  ,---.  ,---.  ,--,--.,--.--.,-'  '-.
+|  |   ,--.| .-. ||	  |  .-.  || .-. :' ,-.  ||  .--''-.  .-'
+|  '--.|  |' '-' '|  ||  ||  | |  |   --. '-'  ||  |	 |  |
+`-----'`--' `---' `--''--'`--' `--' `----' `--`--'`--'	 `--'
+=========================== News ============================
+- Current Version:
+1.2.1: - Fixed a small mistake I made on the last update;
+1.2:- Moved the configurations to the bottom of the script
+   ( Line 200 to 215 );
+  - Fixed a bug when posting multiple news at a time;
+  - Added an option to turn broadcasts on/off;
+1.1: Optmized the script a LOT:
+  - Removed many callsubs;
+  - Optimized the SQL querys;
+  - Corrected a mistake when deletings notices;
+  - Added an option to print the news in descending order
+   so you no longer need to run the SQL query to reorder the
+  table;
+  - Added an option to choose max number of printed news;
+  - The "news" table will now be created when you
+  @reloadscript or restart the server;
+  - Added scape_sql so the script won't error when you use
+  the string ' in your news;
+1.0: First, unoptimized script.
+- Description:
+Easily post and read news in-game.
+=================================================================== */
+prontera,142,167,6	script	News	JP_AIRI,{ //831
+P_STAFF:
+if ( getgmlevel() >= .gmacess ) {
+mes "[Noticias]";
+mes "Que es lo que quieres hacer?";
+switch ( select ("Leer las noticias:Publicar noticias:Borrar noticias") )
+{
+  case 1:
+   next;
+   callsub P_PLAYER;
+  end;
+
+  case 2: //Post new
+   next;
+   mes "[News]";
+   mes "What kind?";
+   switch ( select("Announce:Event" ) )
+   {
+	case 1:
+	 set @type,1;
+	break;
+  
+	case 2:
+	 set @type,2;
+	break;
+  
+	case 3:
+	 set @type,3;
+	break;
+   }
+   next;
+  
+   mes "[News]";
+   mes "Title:";
+   input @title$;
+  
+   next;
+   mes "[News]";
+   mes "Enter the news:";
+   input @mes$[0];
+	if ( select ("Done:Add second part") == 1 ) callsub POST_END;
+  
+   mes "- Enter second part of notice";
+   input @mes$[1];
+	if ( select ("Done:Add third part") == 1 ) callsub POST_END;
+  
+   mes "- Enter third part of notice";
+   input @mes$[2];
+	if ( select ("Done:Add fourth part") == 1 ) callsub POST_END;
+  
+   mes "- Enter fourth part of notice";
+   input @mes$[3];
+	if ( select ("Done:Add last part") == 1 ) callsub POST_END;
+  
+   mes "- Enter last part of notice";
+   input @mes$[4];
+  
+   POST_END:
+	next;
+	mes "[News]";
+	mes "This is how it looks:";
+	next;
+  
+	set .@poster$,strcharinfo(0);
+	set .@dateposted$,gettimestr("%Y-%m/%d %H:%M:%S",21);
+  
+	mes "[^FF0000" + @title$ + "^000000]";
+	mes "By ^0033FF" + .@poster$ + "^000000";
+	mes "At ^0033FF" + .@dateposted$ + "^000000";
+	mes @mes$[0] + " " + @mes$[1] + " " + @mes$[2]+" " + @mes$[3] +" " + @mes$[4];
+	next;
+  
+	mes "[News]";
+	mes "Is it ok?";
+	 if (select("Yes:No") == 2) { next; callsub P_STAFF; }
+	next;
+  
+	set .@ptitle$, escape_sql(@title$);
+	set .@pmes$[0], escape_sql(@mes$[0]);
+	set .@pmes$[1], escape_sql(@mes$[1]);
+	set .@pmes$[2], escape_sql(@mes$[2]);
+	set .@pmes$[3], escape_sql(@mes$[3]);
+	set .@pmes$[4], escape_sql(@mes$[4]);
+  
+	query_sql("INSERT INTO `news` (`poster`,`title`,`content`,`content2`,`content3`,`content4`,`content5`,`type`,`date`) VALUES ('" + .@poster$ + "','" + .@ptitle$ + "','" + .@pmes$[0] + "','" + .@pmes$[1] + "','" + .@pmes$[2] + "','" + .@pmes$[3] + "','" + .@pmes$[4] + "','" + @type + "','" + .@dateposted$ + "')");
+  
+	mes "[News]";
+	mes "New notice posted.";
+	if (.broadcast) {
+	 if ( @type == 1 ) announce .@poster$ + " placed a new announce, check the news!",bc_all;
+	 if ( @type == 2 ) announce .@poster$ + " placed a new event, check the news!",bc_all;
+	 if ( @type == 3 ) announce .@poster$ + " placed a new notice, check the news!",bc_all;
+	}
+	deletearray @mes$[0],10;
+  close;
+
+  case 3: //Delete
+   next;
+   mes "[News]";
+   mes "Enter news ID:";
+  
+   input @did;
+  
+   query_sql "SELECT `poster`,`title`,`content`,`content2`,`content3`,`content4`,`content5`,`date` FROM `news` WHERE `id`='" + @did + "'",.@dposter$,.@dtitle$,.@dcontent$,.@dcontent2$,.@dcontent3$,.@dcontent4$,.@dcontent5$,.@ddate$;
+  
+   next;
+   if ( .@dtitle$ == "") { mes "[News]";  mes "This news doesnt exist!"; close; }
+  
+   mes "La ID ^FF0000" + @did + "^000000 es:";
+   mes "------------------------------";
+   mes "[^FF0000"+.@dtitle$+"^000000]";
+   mes "GM > ^0033FF"+.@dposter$+"^000000";
+   mes "Date: ^0033FF"+.@ddate$+"^000000";
+   mes .@dcontent$ + " " + .@dcontent2$ + " " + .@dcontent3$ + " " + .@dcontent4$ + " " + .@dcontent5$;
+   mes "------------------------------";
+  
+   next;
+   mes "[News]";
+   mes "Confirm?";
+  
+   if (select("Si:No") == 2) { next; callsub P_STAFF; }
+  
+   query_sql "DELETE FROM `news` WHERE `id`='" + @did + "'";
+  
+   next;
+   mes "[News]";
+   mes "News deleted.";
+  close;
+}
+}
+P_PLAYER:
+mes "[News]";
+mes "What do you want to check?";
+switch ( select ("Announces:Events") )
+{
+  case 1:
+   set @type,1;
+  break;
+
+  case 2:
+   set @type,2;
+  break;
+
+  case 3:
+   set @type,3;
+  break;
+}
+next;
+if ( .pdesc ) { query_sql "SELECT `id`,`poster`,`title`,`content`,`content2`,`content3`,`content4`,`content5`,`date` FROM `news` WHERE `type`='" + @type + "' ORDER BY `id` DESC LIMIT " + .nlimit,.@pid,.@pposter$,.@ptitle$,.@pcontent$,.@pcontent2$,.@pcontent3$,.@pcontent4$,.@pcontent5$,.@pdate$; }
+else { query_sql "SELECT `id`,`poster`,`title`,`content`,`content2`,`content3`,`content4`,`content5`,`date` FROM `news` WHERE `type`='" + @type + "' LIMIT " + .nlimit,.@pid,.@pposter$,.@ptitle$,.@pcontent$,.@pcontent2$,.@pcontent3$,.@pcontent4$,.@pcontent5$,.@pdate$; }
+if (!.@pid) { mes "[News]"; mes "This section is empty."; close; }
+for( set .@n, 0; .@n < getarraysize( .@pid ); set .@n, .@n +1 )
+{
+mes "[^FF0000" + .@ptitle$[.@n] + "^000000]";
+mes "GM > ^0033FF" + .@pposter$[.@n] + "^000000";
+mes "Fecha: ^0033FF" + .@pdate$[.@n] + "^000000";
+mes .@pcontent$[.@n];
+mes .@pcontent2$[.@n];
+mes .@pcontent3$[.@n];
+mes .@pcontent4$[.@n];
+mes .@pcontent5$[.@n];
+if ( getgmlevel() >= .gmacess ) {mes "ID of this news: ^FF0000"+.@pid[.@n]+"^000000";}
+mes "==============================";
+}
+next;
+if ( getgmlevel() >= .gmacess ) goto P_STAFF;
+else goto P_PLAYER;
+end;
+OnInit:
+/* ==================== Configurations ==================== */
+// GMs with this lvl will be able to post/delete news.
+// They also will be able to see the post ID.
+set .gmacess,99;
+// Do you want to print the news in descending order (Newer to older)? 1 = yes, 0 = no
+set .pdesc,1;
+// Maximum number of news you want to display ( up to 128 )
+set .nlimit,50;
+// Broadcast when news are posted? 1 = yes, 0 = no
+set .broadcast,1;
+
+/* ======================================================== */
+waitingroom "Noticias - ACTUALIZACION!",0;
+query_sql("CREATE TABLE IF NOT EXISTS `news` (`id` INT(11) NOT NULL auto_increment,`poster` VARCHAR(20) NOT NULL,`title` VARCHAR(20) NOT NULL,`content` VARCHAR(100) NOT NULL,`content2` VARCHAR(100) NOT NULL,`content3` VARCHAR(100) NOT NULL,`content4` VARCHAR(100) NOT NULL,`content5` VARCHAR(100) NOT NULL,`type` INT(11) NOT NULL,`date` DATE NOT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM");
+end;
+}

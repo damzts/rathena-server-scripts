@@ -1,0 +1,26 @@
+// ALTER TABLE `login` ADD COLUMN `assist` TINYINT(1) NOT NULL DEFAULT '0' AFTER `group_id`;
+// ALTER TABLE `login`	ADD COLUMN `vip_until` DATE NOT NULL AFTER `group_id`;
+
+// UPDATE login SET `assist`="000-00-00" WHERE account_id="somevalue";
+gonryun,36,21,0	script	asistente	909,{ 
+
+OnGlobalWhisper: function aSSiChk;
+if (aSSiChk(getcharid(3))){
+dispbottom "Tienes asistente prro";
+close;
+}
+
+function aSSiChk	{
+	
+	query_sql("SELECT DATE_FORMAT(`assist`, '%Y %m %d') FROM login WHERE `account_id` = "+getarg(0)+";",.@expirationDate$);	// Get expiration date
+	if (.@expirationDate$ == NULL) return 0; 
+	if (gettimestr("%Y %m %d",21) >= .@expirationDate$)
+	{
+		dispbottom .@expirationDate$;
+		// dispbottom "Funcion triggereada";
+		// query_sql("UPDATE `login` SET `assist` = NULL WHERE account_id = "+getarg(0)+";");
+		// query_sql("UPDATE `login` SET `group_id` = 0 WHERE account_id = "+getarg(0)+";");
+		dispbottom "El asistente ha expirado."; return 0;
+	}  else dispbottom "Final alcanzado"; return 1;
+}
+}

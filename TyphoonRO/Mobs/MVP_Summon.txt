@@ -1,0 +1,46 @@
+// Lista de MVP's
+abbey02,236,78,21,18	boss_monster	Fallen Bishop Hibram	1871,1,7200000,600000,1
+abbey03,0,0,0,0	boss_monster	Beelzebub	1873,1,43200000,600000,1
+abyss_03,0,0,0,0	boss_monster	Detardeurus	1719,1,10800000,600000,0
+ama_dun03,0,0,0,0	boss_monster	Samurai Specter	1492,1,5460000,600000,0
+anthell02,0,0,0,0	boss_monster	Maya	1147,1,7200000,600000,1
+ayo_dun02,150,90,15,30	boss_monster	Lady Tanee	1688,1,25200000,600000,0
+beach_dun,0,0,0,0	boss_monster	Tao Gunka	1583,1,18000000,600000,0
+ein_dun02,0,0,0,0	boss_monster	RSX-0806	1623,1,7500000,600000,0
+gef_dun01,0,0,0,0	boss_monster	Dracula	1389,1,3600000,600000,1
+gef_dun02,0,0,0,0	boss_monster	Doppelganger	1046,1,7200000,600000,1
+gl_chyard,0,0,0,0	boss_monster	Dark Lord	1272,1,3600000,600000,1
+gld_dun01,0,0,0,0	boss_monster	Eddga	1115,1,28800000,600000,1
+gld_dun02,0,0,0,0	boss_monster	Doppelganger	1046,1,28800000,600000,1
+gld_dun03,0,0,0,0	boss_monster	Maya	1147,1,28800000,600000,1
+gld_dun04,0,0,0,0	boss_monster	Dark Lord	1272,1,28800000,600000,1
+gon_dun03,0,0,0,0	boss_monster	Evil Snake Lord	1418,1,5650000,600000,0
+in_sphinx5,0,0,0,0	boss_monster	Pharaoh	1157,1,3600000,600000,1
+jupe_core,0,0,0,0	boss_monster	Vesper	1685,1,7200000,600000,1
+kh_dun02,0,0,0,0	boss_monster	Kiel D-01	1734,1,7200000,3600000,0
+lhz_dun02,0,0,0,0	boss_monster	Egnigem Cenia	1658,1,7200000,600000,1
+lou_dun03,0,0,0,0	boss_monster	White Lady	1630,1,7000000,600000,1
+moc_pryd04,0,0,0,0	boss_monster	Osiris	1038,1,3600000,600000,0
+moc_pryd06,102,85,1,1	boss_monster	Amon Ra	1511,1,3600000,600000,0
+mosk_dun03,207,221,5,5	boss_monster	Gopinich	1885,1,7200000,600000,1
+odin_tem03,0,0,0,0	boss_monster	Valkyrie Randgris	1751,1,28800000,600000,1
+pay_dun04,120,115,0,0	boss_monster	Moonlight Flower	1150,1,3600000,600000,1
+prt_maze03,0,0,0,0	boss_monster	Baphomet	1039,1,7200000,600000,1
+prt_sewb4,0,0,0,0	boss_monster	Golden Thief Bug	1086,1,3600000,600000,1
+ra_san05,0,0,0,0	boss_monster	Gloom Under Night	1768,1,18000000,600000,0
+thor_v03,0,0,0,0	boss_monster	Ifrit	1832,1,39600000,600000,0
+treasure02,101,151,8,8	boss_monster	Drake	1112,1,7200000,600000,1
+tur_dun04,99,93,20,20	boss_monster	Turtle General	1312,1,3600000,600000,0
+xmas_dun02,0,0,0,0	boss_monster	Stormy Knight	1251,1,3600000,600000,0
+gef_fild02,0,0,0,0	boss_monster	Orc Hero	1087,1,86400000,600000,1
+gef_fild10,0,0,0,0	boss_monster	Orc Lord	1190,1,7200000,600000,0
+gef_fild14,0,0,0,0	boss_monster	Orc Hero	1087,1,3600000,600000,1
+xmas_fild01,0,0,0,0	boss_monster	Garm	1252,1,7200000,600000,1
+mjolnir_04,0,0,0,0	boss_monster	Mistress	1059,1,7200000,600000,1
+moc_fild17,0,0,0,0	boss_monster	Phreeoni	1159,1,7200000,600000,1
+pay_fild11,0,0,0,0	boss_monster	Eddga	1115,1,7200000,600000,1
+ra_fild02,0,0,0,0	boss_monster	Atroce	1785,1,14400000,600000,1
+ra_fild03,0,0,0,0	boss_monster	Atroce	1785,1,10800000,600000,1
+ra_fild04,0,0,0,0	boss_monster	Atroce	1785,1,18000000,600000,1
+ve_fild01,0,0,0,0	boss_monster	Atroce	1785,1,10800000,600000,0
+ve_fild02,120,55,50,50	boss_monster	Atroce	1785,1,21600000,600000,0

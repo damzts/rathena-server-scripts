@@ -1,0 +1,58 @@
+-	script	gmsys	-1,{
+OnWhisperGlobal:
+mes "Hola!, soy el asistente de herramientas para GM's";
+next;
+mes "Yo te puedo dar algunas opciones las cuales puedes configurar aqui!";
+next;
+mes "Bueno, quieres configurar el sistema? (Los commandos se activan cuando re-logeas)";
+next;
+switch(select("Si:No")){
+case 1:
+mes "Exelente!";
+mes "Que deseas configurar?";
+next;
+switch(select("Regenerar Mascota:Mob Mascota")){
+case 1:
+if(getgmlevel() > 3 && gmascota == 1) {
+atcommand "@summon "+gmascotaid+" 999999999999";
+mes "Ahi tienes!";
+close;
+} else 
+mes "No tienes una mascota activada.";
+close;
+case 2:
+mes "Quieres una mascota al logear?";
+next;
+switch(select("No:Si")){
+case 1:
+set gmascota,0;
+close;
+case 2:
+set gmascota,1;
+}
+mes "Puede ser cualquiera y ten en cuenta que esta hecha con el commando @summon por lo cual";
+mes "desaparecera si alguien vacia el mapa, no te preocupes! puedes regenerarla hablandome a mi!";
+input gmascotaid;
+next;
+mes "Hecho!";
+close;
+}
+case 2:
+mes "Fue un placer!";
+close;
+}
+end;
+OnPCLoginEvent:
+    if(getgmlevel() > 10 ) {
+        atcommand "@hide";
+		if (gmascota == 1)
+		atcommand "@summon "+gmascotaid+" 999999999999";
+        atcommand "@speed 0";
+        atcommand "@monsterignore";
+        atcommand "@uptime";
+        dispbottom "Bienvenido GM! Asegurate de chequear los jugadores!";
+        dispbottom "Hora actual : " + gettimestr("%A %B %d %Y - %I:%M %p",40);
+        end;
+    }
+    end;
+}

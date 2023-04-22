@@ -1,0 +1,103 @@
+prontera,261,339,6	script	Intelligence Set	739,{
+	mes "[Intelligence Set]";
+	if(BerzQuest == 1) goto L_Already;
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... Esta tumba pertenece a las personas mas inteligentes del mundo de vRO, la cual me dejo unas instrucciones de como llegar a ser como el con unos items especiales...";
+	next;
+ menu "^E9967AValkyrie Int Hat^000000",-,"^E9967AFairy Int Wings^000000",M_2,"Leave",M_EXIT;
+
+ mes "[Intelligence Set]";
+ mes "Oh!.. Es una exelente opcion, elejiste el ^E9967AValkyrie Int Hat^000000";
+ emotion e_rock;
+ next;
+ mes "[Intelligence Set]";
+ mes "Para poder entregarte el ^E9967AValkyrie Int Hat^000000. Es nesario reunir estos Implementos:";
+
+ mes "^E9967A3^000000  Coronet";
+ mes "^E9967A20^000000  Nurse Cap";
+ mes "^E9967A5^000000  Morpheus's Hood";
+ mes "^E9967A20^000000  Isilla Card";
+ mes "^E9967A1^000000  Valkyrie Helm";
+ mes "^E9967A20^000000  White Dyestuffs";
+ mes "^E9967A60^000000      Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A60,000,000^000000 Zenys";
+ next;
+ mes "[Intelligence Set]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+  mes "[Intelligence Set]";
+  mes "Dame los items, para poder crear tu Valkyrie Int Hat... dejame revisar...";
+  next;
+  mes "[Intelligence Set]";
+ if(countitem(2249) < 3 || countitem(2277) < 20 || countitem(5126) < 5 || countitem(4412) < 20 || countitem(5171) < 1 || countitem(982) < 20 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 60000000) goto L_noItems;
+
+  		delitem 2249, 3;
+  		delitem 2277, 20;
+  		delitem 5126, 5;
+  		delitem 4412, 20;
+  		delitem 5171, 1;
+  		delitem 982, 20;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 60000000;
+  		getitem 20232, 1;
+
+ mes "Genial tu Helm ha sido terminado, disfruta ahora de tu ^E9967AValkyrie Int Hat^000000 !";
+emotion e_grat;
+ close;
+
+M_2:
+ mes "[Intelligence Set]";
+ mes "Oh!.. Grandiosa eleccion las ^E9967AFairy Int Wings^000000";
+ emotion e_rock;
+ next;
+ mes "[Intelligence Set]";
+ mes "Para poder crearte las ^E9967AFairy Int Wings^000000. Es nesario reunir estos materiales:";
+ mes "^E9967A20^000000   Carat Card";
+ mes "^E9967A10^000000   Earring [1]";
+ mes "^E9967A3^000000   Haedonggum [2]";
+ mes "^E9967A20^000000   White Dyestuffs";
+ mes "^E9967A1^000000   Alas de Sangre";
+ mes "^E9967A60^000000   Medallas Evento";
+ mes "^E9967A600^000000     Poring Coins";
+ mes "^E9967A80,000,000^000000 Zenys";
+ next;
+ mes "[Intelligence Set]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, ahora no!.",M_EXIT;
+ 
+  mes "[Intelligence Set]";
+  mes "Dame los items, para poder crear tus Fairy Int Wings... dejame revisar...";
+  next;
+  mes "[Intelligence Set]";
+
+ if(countitem(4288) < 20 || countitem(2622) < 10 || countitem(1128) < 3 ||  countitem(982) < 20 || countitem(27004) < 1 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 80000000) goto L_noItems;
+
+  		delitem 4288, 20;
+  		delitem 2622, 10;
+  		delitem 1128, 3;
+  		delitem 982, 20;
+  		delitem 27004, 1;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 80000000;
+  		getitem 20227, 1;
+
+ mes "Genial tus Wings han sido creadas, disfruta ahora de tus ^E9967AFairy Int Wings^000000 !";
+emotion e_grat;
+ close;
+
+L_noItems:
+ mes "Creo que aun te faltan algunas cosas vuelve cuando tengas todo...";
+ emotion e_sry;
+ close;
+
+M_EXIT:
+ mes "[Intelligence Set]";
+ mes "Bueno, si cambias de opinion aqui estare esperandote...";
+ emotion e_hmm;
+ close;
+}

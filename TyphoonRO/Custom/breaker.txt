@@ -1,0 +1,254 @@
+
+
+
+/*
+# Advance Breaker Room
+
+CREATE TABLE IF NOT EXISTS `E-Breakers` (
+	`no` mediumint(9) unsigned NOT NULL auto_increment,
+	`char_id` int(11) unsigned NOT NULL default '0',
+	`name` varchar(30) NOT NULL DEFAULT '',
+	`time` bigint(11) NOT NULL default '0',
+	`mob_id` mediumint(9) unsigned NOT NULL default '0',
+	
+	PRIMARY KEY  ( `no` )
+) ENGINE=MyISAM;
+
+#  Random Sample Data for viewing the Data in Games / SQL
+# =============================================================
+INSERT INTO `E-Breakers` ( `char_id`,`name`,`time`,`mob_id` ) VALUES ( 10000'Amistry','12411',3000 );
+INSERT INTO `E-Breakers` ( `char_id`,`name`,`time`,`mob_id` ) VALUES ( 20000,'Emistry1','28211',3000 );
+INSERT INTO `E-Breakers` ( `char_id`,`name`,`time`,`mob_id` ) VALUES ( 10000,'Amistry','32511',1899 );
+INSERT INTO `E-Breakers` ( `char_id`,`name`,`time`,`mob_id` ) VALUES ( 20000,'Emistry1','42161',1899 );
+
+*/
+
+
+
+
+
+// ====== mob_db.txt / mob_db2.txt =======
+// 3000,EMPELIUM,Emperium,Emperium,90,700,1,0,0,1,60,73,64,50,1,17,80,50,26,20,10,12,0,8,26,0x160,300,1288,288,384,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+// ====== mob_avail.txt =======
+// 3000,1288
+
+
+
+
+prontera,144,175,4	script	Cuarto de Pruebas AD2	100,{
+if( select( "Rentar un Cuarto","Ver Rank" ) == 1 ){
+
+	if( !instance_id(1) ){
+	
+		if( .Cost ){
+			mes "te costara ^0055FF"+.Cost+" Zeny^000000 para rentar un cuarto por "+.Minute+" Minutes.";
+			if( select("Confirmar:Cancelar") == 2 ) close;
+		}
+		
+		if( !getcharid(1) || !instance_check_party( getcharid(1),1,90,500 ) ){
+			mes "Requieres una party que tenga al menos un miembro de nivel 90 ~ 500";
+			close;
+		}
+		
+		set .@instance,instance_create( " Cuarto de Pruebas ",getcharid(1));
+		
+		if( .@instance < 0 ){
+			switch( .@instance ){
+				Case -2: mes "Identificacion de Party Invalida"; break;
+				Case -3: mes "La cantidad de instancias esta exedida."; break;
+				Case -4: warpparty has_instance( "1@ecl" ),64,71,getcharid(1); break;
+				Case -1:
+				default:
+					mes "Fallo al crear la Instancia.";
+			}
+			
+		}else{
+			set Zeny,Zeny - .Cost;
+			instance_attachmap( "1@ecl",.@instance );
+			instance_set_timeout ( .Minute * 60 ),( .Timeout * 60 ),.@instance;
+			instance_init .@instance;
+			instance_attach .@instance;
+			warpparty has_instance( "1@ecl" ),64,71,getcharid(1);
+			donpcevent instance_npcname( "Helper#Breaker Room",instance_id() )+"::OnInstanceInit";
+			end;
+		}
+		
+	}else{
+		warpparty has_instance( "1@ecl" ),64,71,getcharid(1);
+	}
+	
+}else{
+	switch( select( "Mis records","El mejor","^FF0000Remover Records^000000" ) ){
+		default:
+		Case 1:
+			.@query_size = query_sql( "SELECT `mob_id`,`time` FROM `E-Breakers` WHERE `char_id`='"+getcharid(0)+"' GROUP BY `mob_id` ORDER BY `time` ASC LIMIT "+.size,.@MobID,.@Time );
+				
+			if( !.@query_size ){
+				mes "No se encontraron resultados !";
+			}else{
+				mes "^0055FF[ Record de "+strcharinfo(0)+" ]^000000";
+				for( .@i = 0; .@i < .@query_size; .@i++ ){
+					mes "^DDBB00"+getmonsterinfo( .@MobID[.@i],MOB_NAME )+" : ^FF0000"+( .@Time[.@i] / 1000 )+"."+( .@Time[.@i] % 1000 )+" segs^000000";
+				}
+			}
+			break;
+		Case 2:
+			for( .@i = 0; .@i < .size; .@i++ )
+				.@Menu$ = .@Menu$ + getmonsterinfo( .MonsterList[.@i],MOB_NAME )+":";
+				
+			do{
+				.@mob = select( .@Menu$ ) - 1;
+				
+				do{
+					.@query_size = query_sql( "SELECT `name`,`time`,`mob_id` FROM `E-Breakers` WHERE `mob_id`='"+.MonsterList[.@mob]+"' GROUP BY `name` ORDER BY `time` ASC LIMIT 10 OFFSET "+.@Offset+" ",.@Name$,.@Time,.@MobID );
+					
+					mes "Monstruo : ^FF0000"+getmonsterinfo( .MonsterList[.@mob],MOB_NAME )+"^000000";
+					if( !.@query_size ){
+						mes "No se encontraron resultados !";
+					}else{
+						for( .@i = 0; .@i < .@query_size; .@i++ )
+							mes "^0055FF[ "+( .@Offset + .@i + 1 )+"º : "+.@Name$[.@i]+" ] : ^FF0000"+( .@Time[.@i] / 1000 )+"."+( .@Time[.@i] % 1000 )+"segs^000000";
+						.@Offset += 10;
+					}
+					next;
+				}while( select( ( .@query_size )?"Siguientes 10":"","Regresar" ) == 1 );
+				
+				mes "Selecciona una opcion...";
+			}while( select( "Ver el Ranking","Regresar" ) == 1 );
+			break;
+		Case 3:
+			mes "Cual record quieres borrar ?";
+			if( select( "Record personal",( getgmlevel() < .GMLevel )?"":"[ GM ] Todos los records" ) == 1 ){
+				query_sql( "DELETE FROM `E-Breakers` WHERE `char_id`='"+getcharid(0)+"'" );
+				mes "^FF0000Removidos todos los Records de "+strcharinfo(0)+".^000000";
+			}else{
+				query_sql( "TRUNCATE `E-Breakers`" );
+				mes "^FF0000Tabla Truncada.^000000";
+			}
+			break;
+	}
+
+}
+close;
+
+
+OnInit:
+// GM Level
+.GMLevel = 90;
+// Cost to Rent Room
+.Cost = 30000;
+// Room Duration
+.Minute = 30;
+// Room Timeout
+.Timeout = 5;
+// Edit Monster Lists
+setarray .MonsterList[0],3000,1899,1905,1906,1907,1908,1909,1910,1911,1912,1913,1914,1915;
+
+
+.size = getarraysize( .MonsterList );
+end;
+}
+
+
+
+1@ecl,67,74,4	script	Helper#Breaker Room	100,{
+if( !instance_id(1) ) end;
+
+.@mobcount = mobcount( "1@ecl",instance_npcname( "Helper#Breaker Room",instance_id(1) )+"::OnMyMobDead" );
+
+switch( select( "^0055FFHeal^000000",
+				( getcharid(0) != getpartyleader( getcharid(1),2 ) )? "":( .@mobcount )? "Remover Monstruos":"Escojer monstruo",
+				"Salir",
+				( getcharid(0) == getpartyleader( getcharid(1),2 ) )?"^FF0000Terminar la sala^000000":"" )){
+	default:
+	Case 1:
+		percentheal 100,100;
+		skilleffect 28,MaxHP;
+		specialeffect2 313;
+		break;
+	Case 2:
+		if( .@mobcount ){
+			stopnpctimer;
+			npctalk "Todos los monstruos fueron removidos por el lider de la party.";
+			killmonsterall "1@ecl";
+			close;
+		}else{
+			mes "Selecciona un monstruo...";
+			'selected = getelementofarray( getvariableofnpc( .MonsterList, "Cuarto de Pruebas AD2" ),( select( 'Menu$ ) - 1 ) );
+			close2;
+			monster "1@ecl",-1,-1,"--ja--",'selected,1,instance_npcname("Helper#Breaker Room", instance_id())+"::OnMyMobDead";
+			initnpctimer;
+			end;
+		}
+		break;
+	Case 3:
+		warp "SavePoint",0,0;
+		dispbottom "Es posible entrar en esta habitación en cualquier momento siempre y cuando no se termine el tiempo";
+		break;
+	Case 4:
+		mes "Estas seguro ?";
+		mes "Si usted finaliza esta habitación, no seras capaz de volver a entrar.";
+		if( select("Confirmar:Cancelar") == 1 ){
+			instance_destroy instance_id(1);
+		}
+		break;
+}
+close;
+
+OnInstanceInit:
+	'Menu$ = "";
+	for( .@i = 0; .@i < getvariableofnpc( .size,"Cuarto de Pruebas AD2" ); .@i++ )
+		'Menu$ = 'Menu$ +getmonsterinfo( getelementofarray( getvariableofnpc( .MonsterList, "Cuarto de Pruebas AD2" ),.@i ),0 ) +":";
+
+	sleep 2000;
+	npctalk "Por favor, prepárate...";
+	instance_announce 0,"Bienvenido al cuarto de pruebas vRO",0;
+	sleep 3000;
+	npctalk "Selecciona un monstruo ... y rompelo en pedazos ... las habilidades estan desactivadas.";
+	end;
+	
+OnMyMobDead:
+	stopnpctimer;
+	.@timer = getnpctimer(0);
+	instance_announce 0,"========== [ "+getmonsterinfo( 'selected,MOB_NAME )+" ] ==========",0;
+	instance_announce 0,"Media de daños por segundo : "+( getmonsterinfo( 'selected,MOB_MAXHP ) / ( .@timer / 1000 ) ),0;
+
+	instance_announce 0,"Tiempo total  : "+( .@timer / 1000 )+"."+( .@timer % 1000 )+" segundos.",0;
+	
+	if( getmapusers( has_instance("1@ecl") ) == 1 ){
+		emotion e_heh;
+		mes "No está mal, guardare / actualizare su registro en la base de datos.";
+		
+		query_sql(" SELECT `time` FROM `E-Breakers` WHERE `char_id`='"+getcharid(0)+"' AND `mob_id`='"+'selected+"' ORDER BY `time` ASC",.@Record );
+		mes "Mejor Record : ^0055FF"+( .@Record / 1000 )+"."+( .@Record % 1000 )+" segundos^000000";
+		mes " ";
+		mes "Record Actual : ^0055FF"+( .@timer / 1000 )+"."+( .@timer % 1000 )+" segundos^000000";
+		
+		if( select("Record ^0055FF"+( .@timer / 1000 )+"."+( .@timer % 1000 )+" segundos^000000:Nope") == 1 ){
+			query_sql( "DELETE FROM `E-Breakers` WHERE `char_id`='"+getcharid(0)+"' AND `mob_id`='"+'selected+"' AND `time` > '"+.@timer+"'" );
+			query_sql( "INSERT INTO `E-Breakers` ( `char_id`,`name`,`time`,`mob_id` ) VALUES ( '"+getcharid(0)+"','"+strcharinfo(0)+"','"+.@timer+"','"+'selected+"' )" );
+		}
+		close;
+	}else{
+		emotion e_sry;
+		npctalk "No esta mal, pero el Record no se guardara para el equipo completo si no para el lider solamente.";
+	}
+	end;
+	
+}
+
+
+// ==== MAP FLAGS ====
+1@ecl	mapflag	nogo
+1@ecl	mapflag	nomemo
+1@ecl	mapflag	nosave
+1@ecl	mapflag	nobranch
+1@ecl	mapflag	nowarp
+1@ecl	mapflag	nobaseexp
+1@ecl	mapflag	nojobexp
+1@ecl	mapflag	nomobloot
+1@ecl	mapflag	nomvploot
+1@ecl	mapflag	nowarpto
+1@ecl	mapflag	noskill
+
+

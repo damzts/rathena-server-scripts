@@ -1,0 +1,103 @@
+prontera,271,329,6	script	Vitality Set	792,{
+	mes "[Vitality Set]";
+	if(BerzQuest == 1) goto L_Already;
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... Sabias q tengo la habilidad de crear unos poderosos items. Te gustaria tener mas vitalidad de lo normal?? si estas interesado, puedes elejir entre estas opciones...";
+	next;
+ menu "^E9967AValkyrie Vit Hat^000000",-,"^E9967AFairy Vit Wings^000000",M_2,"Leave",M_EXIT;
+
+ mes "[Vitality Set]";
+ mes "Oh!.. Es la mejor opcion que allas tomado en tu vida, elejiste el ^E9967AValkyrie Vit Hat^000000";
+ emotion e_rock;
+ next;
+ mes "[Vitality Set]";
+ mes "Para poder obtener el ^E9967AValkyrie Vit Hat^000000. Necesitas entregarme lo siguiente:";
+
+ mes "^E9967A5^000000  Corsair";
+ mes "^E9967A20^000000  Beret";
+ mes "^E9967A8^000000  Goibne's Helm";
+ mes "^E9967A20^000000  Green Ferus Card";
+ mes "^E9967A1^000000  Valkyrie Helm";
+ mes "^E9967A20^000000  Darkgreen Dyestuffs";
+ mes "^E9967A60^000000    Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A60,000,000^000000 Zenys";
+ next;
+ mes "[Vitality Set]";
+ mes "Tienes todos lo que necesito?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+  mes "[Vitality Set]";
+  mes "Dame los items, para poder trabajar en tu Valkyrie Int Hat... dejame ver...";
+  next;
+  mes "[Vitality Set]";
+ if(countitem(5019) < 5 || countitem(5172) < 20 || countitem(5821) < 8 || countitem(4381) < 20 || countitem(5171) < 1 || countitem(979) < 20 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 60000000) goto L_noItems;
+
+  		delitem 5019, 5;
+  		delitem 5172, 20;
+  		delitem 5821, 8;
+  		delitem 4381, 20;
+  		delitem 5171, 1;
+  		delitem 979, 20;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 60000000;
+  		getitem 20229, 1;
+
+ mes "Genial tu Hat esta terminado, disfruta del ^E9967AValkyrie Vit Hat^000000 !";
+emotion e_grat;
+ close;
+
+M_2:
+ mes "[Vitality Set]";
+ mes "Oh!.. Grandiosa eleccion las ^E9967AFairy Vit Wings^000000";
+ emotion e_rock;
+ next;
+ mes "[Vitality Set]";
+ mes "Para poder crear las ^E9967AFairy Vit Wings^000000. necesito estos materiales:";
+ mes "^E9967A20^000000   Ice Titan Card";
+ mes "^E9967A10^000000   Necklace [0]";
+ mes "^E9967A3^000000   Holy Guard";
+ mes "^E9967A20^000000   Darkgreen Dyestuffs";
+ mes "^E9967A1^000000   Alas de Sangre";
+ mes "^E9967A60^000000   Medallas Evento";
+ mes "^E9967A600^000000     Poring Coins";
+ mes "^E9967A80,000,000^000000 Zenys";
+ next;
+ mes "[Vitality Set]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, ahora no!.",M_EXIT;
+ 
+  mes "[Vitality Set]";
+  mes "Dame los items, para poder trabajar en tus Fairy Vit Wings... dejame revisar...";
+  next;
+  mes "[Vitality Set]";
+
+ if(countitem(4417) < 20 || countitem(2603) < 10 || countitem(2110) < 3 ||  countitem(979) < 20 || countitem(27004) < 1 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 80000000) goto L_noItems;
+
+  		delitem 4417, 20;
+  		delitem 2603, 10;
+  		delitem 2110, 3;
+  		delitem 979, 20;
+  		delitem 27004, 1;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 80000000;
+  		getitem 20223, 1;
+
+ mes "Genial tus Wings han sido creadas, dale un buen uso a tus ^E9967AFairy Vit Wings^000000 !";
+emotion e_grat;
+ close;
+
+L_noItems:
+ mes "Creo que aun te faltan algunas, no perdere el tiempo contigo, vuelve cuando tengas todo...";
+ emotion e_sry;
+ close;
+
+M_EXIT:
+ mes "[Vitality Set]";
+ mes "Bueno, si te atreves a hacer este reto aqui estare...";
+ emotion e_hmm;
+ close;
+}

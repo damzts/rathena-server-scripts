@@ -1,0 +1,29 @@
+prontera,166,161,6	script	CPvP	HIDDEN_NPC,{
+	end;
+
+OnInit:
+	delwaitingroom;
+	waitingroom "",0;
+	sleep 500; 
+	delwaitingroom;
+	waitingroom "- Evento -",0;
+end;
+}
+
+prontera,165,161,6	script	PvPWarp	WARPNPC,2,2,{
+OnInit:
+	delwaitingroom;
+	waitingroom "",0;
+	sleep 500; 
+	delwaitingroom;
+	waitingroom "- PvP -",0;
+end;
+
+OnTouch:
+mes "Quieres entrar a PvP?";
+switch(select("Si:No")){
+case 1:
+warp "1@ge_st",0,0;
+case 2:
+} end;
+}

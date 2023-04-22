@@ -1,0 +1,64 @@
+// ALTER TABLE `login` ADD COLUMN `assist` TINYINT(1) NOT NULL DEFAULT '0' AFTER `group_id`;
+// ALTER TABLE `login`	ADD COLUMN `vip_until` DATE NOT NULL AFTER `group_id`;
+
+// UPDATE login SET `assist`="000-00-00" WHERE account_id="somevalue";
+-	script	asistente	HIDDEN_NPC,{ 
+OnWhisperGlobal: 
+	getmapxy .@mapnvz$,.@xnvz,.@ynvz,0;
+	if ( .@mapnvz$ == "quiz_01" ) end;
+function aSSiChk;
+if (aSSiChk(getcharid(3))){
+mes "Bienvenido al asistente.";
+mes "Selecciona un servicio.";
+l_menuas:
+   switch(select("Buffer:Reparar items:Tiendita"))
+   {
+   case 1:
+	skilleffect 33,0; sc_start SC_ANGELUS,900000,5;
+	skilleffect 74,0; sc_start SC_MAGNIFICAT,900000,2;
+	skilleffect 75,0; sc_start SC_GLORIA,900000,3;
+	skilleffect 66,0; sc_start SC_IMPOSITIO,900000,2;
+	skilleffect 34,0; sc_start SC_BLESSING,900000,10;
+	skilleffect 29,0; sc_start SC_INCREASEAGI,900000,10;
+	sc_start SC_STRFood,900000,4;
+	sc_start SC_AGIFood,900000,4;
+	sc_start SC_VITFood,900000,4;
+	sc_start SC_INTFood,900000,4;
+	sc_start SC_DEXFood,900000,4;
+	sc_start SC_LUKFood,900000,4;
+	skilleffect 361,0; sc_start SC_ASSUMPTIO,900000,5;
+	close;
+	   
+   case 2:
+	mes "Reparando items..";
+	while (getbrokenid(1)) {
+	repair(1);
+	set .@i, .@i +1;
+	}
+	if (.@i) dispbottom .@i + " items reparados.";
+	close;
+	
+	case 3:
+	close2;
+	callshop "Tiendita",0;
+	// openshop("Tiendita");
+	end;
+	
+   }
+} else 
+	dispbottom "No cuentas con el servicio de asistente.";
+	dispbottom "Contacta a algun miembro del staff para mas información..";
+	end;
+
+function aSSiChk	{
+	query_sql("SELECT DATE_FORMAT(`assist`, '%Y %m %d') FROM login WHERE `account_id` = "+getarg(0)+";",$@expirationDate$);	// Get expiration date
+	if ($@expirationDate$ == "0000-00-00") return 0;  else if (gettimestr("%Y %m %d",21) >= $@expirationDate$) return 0; else return 1;
+}
+
+OnPCLoginEvent:
+dispbottom "Asistente:		 "+((aSSiChk(getcharid(3)))?"ACTIVO":"INACTIVO");
+dispbottom "Fecha de expiracion: "+$@expirationDate$;
+dispbottom "Si tienes asistente activado puedes llamarlo enviando un mensaje a npc:asistente";
+dispbottom "----------------------------------------------------------------------";
+end;
+}

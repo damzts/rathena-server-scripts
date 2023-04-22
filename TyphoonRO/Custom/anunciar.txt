@@ -1,0 +1,5 @@
+-	script	HourlyAnnounce	-1,{
+OnWhisperGlobal:
+OnInit: setarray .Messages$[0],"Disfruta tu estancia Gungnir RO!~ ","Diviertete y no olvides votar e invitar a tus amigos ^^","Recuerda comportarte como es debido, un mal comportamiento te puede llebar a un baneo!"; end;
+OnMinute10: announce .Messages$[rand(getarraysize(.Messages$))],0; end;
+}

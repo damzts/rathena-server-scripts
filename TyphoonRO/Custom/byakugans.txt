@@ -1,0 +1,103 @@
+prontera,258,333,6	script	Byakugans	791,{
+	mes "[Byakugans]";
+	if(BerzQuest == 1) goto L_Already;
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... Soy un desertor de una tribu ninja, Te consedere los secretos de está.. Quieres obtener los secretos?...";
+	next;
+ menu "^E9967AByakugan^000000",-,"^E9967AGreen Byakugan^000000",M_2,"Leave",M_EXIT;
+
+mes "[Byakugans]";
+ mes "Oh!.. Interezante, te intereza el poder mas puro que existe... el  ^E9967AByakugan^000000";
+ emotion e_rock;
+ next;
+ mes "[Byakugan]";
+ mes "Para poder traspasarte el ^E9967AByakugan^000000. Es nesario que cumplas algo por mi antes..:";
+
+ mes "^E9967A50^000000  Cat's Eye";
+ mes "^E9967A1^000000  Dark Blinder";
+ mes "^E9967A7^000000  Eye of Hellion ";
+ mes "^E9967A10^000000  Beholder Card";
+ mes "^E9967A10^000000  Seeker Card";
+ mes "^E9967A20^000000  White Dyestuffs";
+ mes "^E9967A50^000000      Medallas Evento";
+ mes "^E9967A550^000000      Poring Coins";
+ mes "^E9967A35,000,000^000000 Zenys";
+ next;
+ mes "[Byakugans]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+ mes "[Byakugans]";
+  mes "Entregame lo que te he pedido para entregare el poderoso Byakugan...  dejame revisar...";
+  next;
+  mes "[Byakugans]";
+ if(countitem(7263) < 50 || countitem(5104) < 1 || countitem(7337) < 7 || countitem(4356) < 10 || countitem(4414) < 10 || countitem(982) < 20 || countitem(26021) < 50 || countitem(7539) < 550 ||Zeny < 35000000) goto L_noItems;
+
+  		delitem 7263, 50;
+  		delitem 5104, 1;
+  		delitem 7337, 7;
+  		delitem 4356, 10;
+  		delitem 4414, 10;
+  		delitem 982, 20;
+  		delitem 26021, 50;
+  		delitem 7539, 550;
+  		set Zeny, Zeny - 35000000;
+  		getitem 20000, 1;
+
+ mes "Exelente, Resive y protege a tus aliados de las poderosaas fuerzas del mal, Ten el  ^E9967AByakugan^000000 !";
+emotion e_grat;
+ close;
+
+M_2:
+ mes "[Byakugans]";
+ mes "Oh!.. Excelente eleccion las ^E9967AGreen Byakugan^000000";
+ emotion e_rock;
+ next;
+ mes "[Byakugans]";
+ mes "Para poder crear el ^E9967AGreen Byakugan ^000000. Es nesario reunir estos materiales:";
+ mes "^E9967A50^000000  Cat's Eye";
+ mes "^E9967A1^000000  Dark Blinder";
+ mes "^E9967A12^000000  Eye of Hellion ";
+ mes "^E9967A13^000000  Beholder Card";
+ mes "^E9967A13^000000  Seeker Card";
+ mes "^E9967A20^000000  Green Dyestuffs";
+ mes "^E9967A60^000000      Medallas Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A45,000,000^000000 Zenys";
+ next;
+ mes "[Byakugans]";
+ mes "Tienes todos los materiales?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+ mes "[Byakugan]";
+  mes "Entregame lo que te he pedido para entregare el poderoso Byakugan...  dejame revisar...";
+  next;
+  mes "[Byakugan]";
+ if(countitem(7263) < 50 || countitem(5104) < 1 || countitem(7337) < 12 || countitem(4356) < 13 || countitem(4414) < 13 || countitem(979) < 20 || countitem(26021) < 60 || countitem(7539) < 600 ||Zeny < 45000000) goto L_noItems;
+
+  		delitem 7263, 50;
+  		delitem 5104, 1;
+  		delitem 7337, 12;
+  		delitem 4356, 13;
+  		delitem 4414, 13;
+  		delitem 979, 20;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 45000000;
+  		getitem 20001, 1;
+ mes "Ten tus Green Byakugan los he creado para ti, disfruta ahora de tus nuevos poderes... El  ^E9967AGreen Byakugan^000000 !";
+emotion e_grat;
+ close;
+
+L_noItems:
+ mes "Creo que aun te faltan algunas cosas vuelve cuando tengas todo...";
+ emotion e_sry;
+ close;
+
+M_EXIT:
+ mes "[Byakugan]";
+ mes "Bueno, si TIENES el VALOR para ser parte de este reto, aqui estare...";
+ emotion e_hmm;
+ close;
+}

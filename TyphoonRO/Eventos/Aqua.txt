@@ -1,0 +1,247 @@
+//==================================================
+//==================================================
+// Aqua
+//==================================================
+// Version 2.1
+//==================================================
+// Autor: Ivion
+//==================================================
+// Descripción:
+// - Evento en Amatsu.
+// - Aparecen 5000 Marin, 50 Deviruchi y 5 Deviling del Aqua.
+// - El premio por matar un Demonio del Aqua es 5 obb y 1/5 de BaseExp.
+// - El evento termina cuando los 5 Demonios del Aqua son matados.
+// - En Prontera hay un npc que te lleva al evento.
+//==================================================
+// Actualizaciones:
+//
+// 1.2:
+// - Arreglados numerosos bugs.
+// - Probado con éxito.
+// - Añadidos 50 Deviruchi al evento.
+// - Modificado premio del evento.
+// - Revisados textos.
+// - ...
+// 1.3:
+// - Disminuido el número de Marin a 5000 para disminuir el lag.
+// 1.4:
+// - Renombradas variables para evitar errores.
+// 2:
+// - Remodelado practicamente todo.
+// - Añadida opción de repetición automática.
+// - Añadido efecto de lluvia.
+// 2.1:
+// - Cambiado el efecto lluvia por efecto sakura.
+//==================================================
+//==================================================
+
+
+//==================================================
+// Data
+//==================================================
+amatsu.gat,0,0,0	script	Aqua	-1,{
+
+OnInit:
+	set $Aqua_Auto,1; // Repetición automática. (1 Activado, 0 Desactivado)
+	initnpctimer;
+	goto Aqua1;
+end;
+
+Aqua1:
+	setmapflag "amatsu.gat",mf_sakura;
+	enablenpc "Anuncio";
+	enablenpc "Señor de Amatsu";
+	monster "amatsu.gat",0,0,"Aqua",1242,1000,"Aqua::OnAqua1";
+	monster "amatsu.gat",0,0,"Aqua",1242,1000,"Aqua::OnAqua2";
+	monster "amatsu.gat",0,0,"Aqua",1242,1000,"Aqua::OnAqua3";
+	monster "amatsu.gat",0,0,"Aqua",1242,1000,"Aqua::OnAqua4";
+	monster "amatsu.gat",0,0,"Aqua",1242,1000,"Aqua::OnAqua5";
+	monster "amatsu.gat",0,0,"Deviruchi",1109,50,"Aqua::OnDev";
+	monster "amatsu.gat",0,0,"Demonio del Aqua",2016,5,"Aqua::OnDemon";
+	set $Aqua_Demon,5;
+end;
+
+OnTimer6000:
+	stopnpctimer;
+	announce "en payon a aparecido el npc que te llevara a el evento Amatsu | Aqua",bc_all,bc_yellow;
+	setnpctimer 12000;
+end;
+
+OnAqua1:
+	if ($Aqua_Demon >= 5) monster "amatsu.gat",0,0,"Aqua",1242,1,"Aqua::OnAqua1";
+end;
+
+OnAqua2:
+	if ($Aqua_Demon >= 4) monster "amatsu.gat",0,0,"Aqua",1242,1,"Aqua::OnAqua2";
+end;
+
+OnAqua3:
+	if ($Aqua_Demon >= 3) monster "amatsu.gat",0,0,"Aqua",1242,1,"Aqua::OnAqua3";
+end;
+
+OnAqua4:
+	if ($Aqua_Demon >= 2) monster "amatsu.gat",0,0,"Aqua",1242,1,"Aqua::OnAqua4";
+end;
+
+OnAqua5:
+	if ($Aqua_Demon >= 1) monster "amatsu.gat",0,0,"Aqua",1242,1,"Aqua::OnAqua5";
+end;
+
+OnDev:
+	if ($Aqua_Demon >= 1) 	monster "amatsu.gat",0,0,"Deviruchi",1109,1,"Aqua::OnDev";
+end;
+
+OnDemon:
+	set $Aqua_Demon,$Aqua_Demon-1;
+	if ($Aqua_Demon == 4) {
+		set #Aqua_Hero1,1;
+		announce "El usuario "+strcharinfo(0)+" ha matado uno de los cinco demonios del Aqua.",bc_yellow|bc_all;
+		killmonster "amatsu.gat","Aqua::OnAqua1";
+	}
+	if ($Aqua_Demon == 3) {
+		set #Aqua_Hero2,1;
+		announce "El usuario "+strcharinfo(0)+" ha matado uno de los cinco demonios del Aqua.",bc_yellow|bc_all;
+		killmonster "amatsu.gat","Aqua::OnAqua2";
+	}
+	if ($Aqua_Demon == 2) {
+		set #Aqua_Hero3,1;
+		announce "El usuario "+strcharinfo(0)+" ha matado uno de los cinco demonios del Aqua.",bc_yellow|bc_all;
+		killmonster "amatsu.gat","Aqua::OnAqua3";
+	}
+	if ($Aqua_Demon == 1) {
+		set #Aqua_Hero4,1;
+		announce "El usuario "+strcharinfo(0)+" ha matado uno de los cinco demonios del Aqua.",bc_yellow|bc_all;
+		killmonster "amatsu.gat","Aqua::OnAqua4";
+	}
+	if ($Aqua_Demon == 0) {
+		set #Aqua_Hero5,1;
+		announce "El usuario "+strcharinfo(0)+" ha matado uno de los cinco demonios del Aqua.",bc_yellow|bc_all;
+		killmonster "amatsu.gat","Aqua::OnAqua5";
+		killmonster "amatsu.gat","Aqua::OnDev";
+		disablenpc "Anuncio";
+		removemapflag "amatsu.gat",mf_rain;
+		startnpctimer;
+	}
+	getitem 7306,1;
+	set BaseExp,(BaseExp + (NextBaseExp/5)); // BaseExp para los ganadores. (Por defecto 1/5)
+end;
+
+OnTimer25000:
+	announce "amatsu.gat La tormenta se desvanece al igual que las almas de los cinco demonios.",bc_map,bc_yellow;
+end;
+
+OnTimer30000:
+	announce "amatsu.gat Id en paz, héroes de Amatsu. Sabed que hazaña nunca será olvidada.",bc_map,bc_yellow;
+end;
+
+OnTimer1800000:
+	disablenpc "Señor de Amatsu";
+	if ($Aqua_Auto == 0) stopnpctimer;
+end;
+
+OnTimer90100000:
+	stopnpctimer;
+	set $@Aqua_Repeat,rand(1000);
+	if ($@Aqua_Repeat <= 1000) goto Aqua1; // Posibilidades de que se reactive el evento en cada hora. (Por defecto 1/1000)
+	setnpctimer 86500000;
+	startnpctimer;
+end;
+}
+
+
+//==================================================
+// Anuncio
+//==================================================
+payon.gat,173,100,4	script	Anuncio	857,{
+
+OnClick:
+	mes "Amatsu | Aqua";
+	mes "---";
+	mes "Lluvia torrenciales arrasan la ciudad de Amatsu.";
+	mes "Los cinco demonios del Aqua han escapado misteriosamente de su prisión en las mazmorras del Castillo.";
+	mes "La ciudad es ahora un caos de infinitas burbujas azules que lo arrasan todo.";
+	mes "El Señor de Amatsu ofrece una gran recompensa por cada una de las perturbadas almas de los demonios del Aqua.";
+	mes "La vida de la ciudad de Amatsu está colgando de un hilo. Si nadie hace nada, pronto desaparecerá de los mapas.";
+	mes "---";
+	next;
+	menu "Ir a Amatsu.",Anuncio1,"Cancelar.",-;
+	close;
+end;
+
+Anuncio1:
+	warp "amatsu.gat",93,244;
+end;
+}
+
+
+//==================================================
+// Señor de Amatsu
+//==================================================
+amatsu.gat,88,235,7	script	Señor de Amatsu	768,{
+
+OnClick:
+	if ((#Aqua_Hero1 == 1) && (countitem(7306) >= 1)) goto Rey1;
+	if ((#Aqua_Hero2 == 1) && (countitem(7306) >= 1)) goto Rey2;
+	if ((#Aqua_Hero3 == 1) && (countitem(7306) >= 1)) goto Rey3;
+	if ((#Aqua_Hero4 == 1) && (countitem(7306) >= 1)) goto Rey4;
+	if ((#Aqua_Hero5 == 1) && (countitem(7306) >= 1)) goto Rey5;
+	if ($Aqua_Demon == 0) goto Rey6;
+	mes "[Señor de Amatsu]";
+	mes "Las blancas flores de los almendros caen a causa de la tormenta.";
+	mes "Las negras golondrinas se esconden a causa de la tormenta.";
+	mes "Poco a poco, Amatsu muere a causa de la tormenta";
+	next;
+	mes "[Señor de Amatsu]";
+	mes "Te lo suplico, gran guerrero, salva la ciudad de Amatsu.";
+	mes "Traeme el alma de esos demonios y te convertiré en un héroe.";
+	close;
+end;
+
+Rey1:
+	set #Aqua_Hero1,0;
+	goto Rey7;
+end;
+
+Rey2:
+	set #Aqua_Hero2,0;
+	goto Rey7;
+end;
+
+Rey3:
+	set #Aqua_Hero3,0;
+	goto Rey7;
+end;
+
+Rey4:
+	set #Aqua_Hero4,0;
+	goto Rey7;
+end;
+
+Rey5:
+	set #Aqua_Hero5,0;
+	goto Rey7;
+end;
+
+Rey6:
+	mes "[Señor de Amatsu]";
+	mes "Las blancas flores de los almendros vuelven a crecer.";
+	mes "Las negras golondrinas regresan de sus nidos.";
+	mes "La ciudad vuelve a ser la misma de siempre.";
+	close;
+end;
+
+Rey7:
+	mes "[Señor de Amatsu]";
+	mes "Heróica ha sido tu azaña, y como un héroe serás recompensado.";
+	mes "No olvides que desde ahora un héroe serás para estas tierras.";
+	mes "Espero que este obsequio pague con creces el bien que a nosotros nos has entregado.";
+	mes "Te deseo mucha suerte y una larga vida de triunfos.";
+	delitem 7306,1;
+	getitem 7539,50; // Premio para los ganadores. (Por defecto 5 Old Blue Box)
+	getitem 26021,15;
+	close;
+end;
+}
+
+//==================================================
+//==================================================

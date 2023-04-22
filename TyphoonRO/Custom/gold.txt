@@ -1,0 +1,100 @@
+// Gold Room Ordeal by Rokimoki v1.0
+// Request by: InsanityProductionsR (eAthena Forum)
+// ---
+
+// Warps a prontera v1.0
+-	script	Retorno::Retorno	54,{
+mes "Quieres regresar?";
+switch(select("No:Si")) {
+case 1:
+close;
+break;
+case 2:
+warp "prontera",153,193;
+end;
+}
+} // End Script
+ 
+// Duplicados Warps v1.0
+ordeal_3-2,24,228,0	duplicate(Retorno)	Retorno#r1	54
+ordeal_3-2,25,58,0	duplicate(Retorno)	Retorno#r2	54
+ordeal_3-2,289,130,0	duplicate(Retorno)	Retorno#r3	54
+ordeal_3-2,283,230,0	duplicate(Retorno)	Retorno#r4	54
+ordeal_3-2,210,203,0	duplicate(Retorno)	Retorno#r5	54
+ 
+// Gold Room Warper v1.0
+prontera,164,160,3	script	Ordeal Gold Room	1086,{
+set .@nombre$, "[^0000FFCucaracha de Oro^000000]";
+mes .@nombre$;
+if (gold > 0) {
+        mes "BZbRzBrZ !!";
+        next;
+        mes .@nombre$;
+        mes "Por fin puedo hablar, ¿quieres cambiar tus gold points a Gold Item?";
+        next;
+        if (select("Claro!:Nope") == 2) close;
+        mes .@nombre$;
+        mes "Ya está ^^ BzBzBZ!!";
+        getitem 969,gold;
+        set gold, 0;
+        next;
+        mes .@nombre$;
+} // End if
+mes "Bz Bz BZ!¡¡!";
+next;
+if (select("Gold BzBz!!:¿Una cucaracha?") == 2) close;
+close2;
+warp "ordeal_3-2",154,154;
+end;
+} // End Script
+ 
+// Script Gold v1.0
+-	script	GoldRoom	-1,{
+OnNPCKillEvent:
+if (strcharinfo(3) != "ordeal_3-2") end;
+if (killedrid != 1233) end;
+switch (rand(3)) {
+        case 0:
+                set .@g, 1;
+                set gold, gold + .@g;
+                break;
+               
+        case 1:
+                set .@g, 2;
+                set gold, gold + .@g;
+                break;
+               
+        case 2:
+                set .@g, 3;
+                set gold, gold + .@g;
+                break;
+} // End switch
+dispbottom "Has ganado " +.@g +" Gold Points, ahora tienes " +gold +" gold points.";
+end;
+ 
+OnPCDieEvent:
+if (strcharinfo(3) != "ordeal_3-2") end;
+dispbottom "Has perdido tus gold points porque te han matado en la sala Gold Room Ordeal.";
+set gold, 0;
+end;
+} // End Script
+ 
+ 
+// Natural Monsters v1.0
+ordeal_3-2,0,0,0,0	monster	Gold Peco Peco	1233,20,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Peco Peco	1233,20,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Peco Peco	1233,20,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Peco Peco	1233,20,0,0,0
+ordeal_3-2,0,0,0,0	monster	Gold Guardian	1439,15,0,0,0
+ordeal_3-2,154,154,0,0	monster	Gold Guardian	1439,5,0,0,0
+ 
+// Map Flags v1.0
+ordeal_3-2	mapflag	nobranch
+ordeal_3-2	mapflag	nomemo
+ordeal_3-2	mapflag	nowarpto
+ordeal_3-2	mapflag	nopenalty
+ordeal_3-2	mapflag	pvp_noparty
+ 
+// Poner esto en la Mob_DB2.txt sin los "//" y hacer @reloadmobdb ó reiniciar el servidor
+// 1233,PECOPECO,Gold Peco Peco,Gold Peco Peco,60,3500,0,0,0,1,300,400,0,0,1,13,13,25,27,9,10,12,2,2,23,0x1089,200,1564,864,576,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+// 1439,G_HIGH_ORC,High Orc,High Orc,90,9000000,0,0,0,1,5000,10000,90,90,90,90,90,90,90,90,10,12,2,7,43,0x3885,160,1500,500,1000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0

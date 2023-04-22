@@ -1,0 +1,103 @@
+prontera,248,351,6	script	Lucky Set	882,{
+	mes "[Lucky Set]";
+	if(BerzQuest == 1) goto L_Already;
+	mes "Hola ^5555FF" + strcharinfo(0) + "^000000!... En esta tumba esta mi padre ='( el cual la mafia lo mato por tener mucha suerte en los juegos, nadie sabia el por que de su suerte, pero antes de que la mafia lo matara mi papa me hiso esconder sus amuletos de la suerte...";
+	next;
+ menu "^E9967AValkyrie Luk Hat^000000",-,"^E9967AFairy Luk Wings^000000",M_2,"Leave",M_EXIT;
+
+ mes "[Lucky Set]";
+ mes "Oh!.. Es una exelente eleccion, el ^E9967AValkyrie Luk Hat^000000";
+ emotion e_rock;
+ next;
+ mes "[Lucky Set]";
+ mes "Para poder obtener el ^E9967AValkyrie Luk Hat^000000. necesito lo siguiente:";
+
+ mes "^E9967A5^000000  Jewel Crown";
+ mes "^E9967A20^000000  Joker Jester";
+ mes "^E9967A2^000000  Helm of Angel";
+ mes "^E9967A20^000000  Baby Leopard Card";
+ mes "^E9967A20^000000  Scarlet Dyestuffs";
+ mes "^E9967A1^000000  Valkyrie Helm";
+ mes "^E9967A60^000000    Medallas de Evento";
+ mes "^E9967A600^000000      Poring Coins";
+ mes "^E9967A60,000,000^000000 Zenys";
+ next;
+ mes "[Lucky Set]";
+ mes "Me trajiste todo lo que te pedi?";
+ next;
+ menu "Si claro.",-,"Nop, aun no!.",M_EXIT;
+
+  mes "[Lucky Set]";
+  mes "Dame los items, para poder entregarte tu Valkyrie Luk Hat... dejame ver...";
+  next;
+  mes "[Lucky Set]";
+ if(countitem(5002) < 5 || countitem(5003) < 20 || countitem(5025) < 2 || countitem(4233) < 20 || countitem(975) < 20 || countitem(5171) < 1 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 60000000) goto L_noItems;
+
+  		delitem 5002, 5;
+  		delitem 5003, 20;
+  		delitem 5025, 2;
+  		delitem 4233, 20;
+  		delitem 975, 20;
+  		delitem 5171, 1;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 60000000;
+  		getitem 20231, 1;
+
+ mes "Genial, aca esta tu Helm ^E9967AValkyrie Luk Hat^000000 !";
+emotion e_grat;
+ close;
+
+M_2:
+ mes "[Lucky Set]";
+ mes "Oh!.. Fabulosa eleccion las ^E9967AFairy Luk Wings^000000";
+ emotion e_rock;
+ next;
+ mes "[Lucky Set]";
+ mes "Para poder entregarte las ^E9967AFairy Luk Wings^000000. Es nesario lo siguiente:";
+ mes "^E9967A20^000000   Cookie Card,";
+ mes "^E9967A10^000000   Rosary [1]";
+ mes "^E9967A2^000000   Ledger of Death [2]";
+ mes "^E9967A20^000000   Scarlet Dyestuffs";
+ mes "^E9967A1^000000   Alas De Sangre";
+ mes "^E9967A60^000000   Medallas Evento";
+ mes "^E9967A600^000000     Poring Coins";
+ mes "^E9967A80,000,000^000000 Zenys";
+ next;
+ mes "[Lucky Set]";
+ mes "Tienes todos lo que te encarge?";
+ next;
+ menu "Si claro.",-,"Nop, ahora no!.",M_EXIT;
+ 
+  mes "[Lucky Set]";
+  mes "Dame los items, para poder entregarte tus Fairy Luk Wings... dejame revisar...";
+  next;
+  mes "[Lucky Set]";
+
+ if(countitem(4293) < 20 || countitem(2626) < 10 || countitem(1565) < 2 ||  countitem(975) < 20 || countitem(27004) < 1 || countitem(26021) < 60 || countitem(7539) < 600 || Zeny < 80000000) goto L_noItems;
+
+  		delitem 4293, 20;
+  		delitem 2626, 10;
+  		delitem 1565, 2;
+  		delitem 975, 20;
+  		delitem 27004, 1;
+  		delitem 26021, 60;
+  		delitem 7539, 600;
+  		set Zeny, Zeny - 80000000;
+  		getitem 20226, 1;
+
+ mes "Genial, aca tengo tus Wings, espero que disfrutes tus ^E9967AFairy Luk Wings^000000 !";
+emotion e_grat;
+ close;
+
+L_noItems:
+ mes "Creo que aun te faltan algunas cosas vuelve cuando tengas todo...";
+ emotion e_sry;
+ close;
+
+M_EXIT:
+ mes "[Lucky Set]";
+ mes "Bueno, si cambias de opinion aqui estare...";
+ emotion e_hmm;
+ close;
+}

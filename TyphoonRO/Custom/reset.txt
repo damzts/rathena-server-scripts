@@ -1,0 +1,65 @@
+//===== eAthena Script =======================================
+//= Reset NPC for Athena by Script & DB Team
+//===== By: ================================================== 
+//= eAthena Team
+//===== Current Version: ===================================== 
+//= 1.1
+//===== Compatible With: ===================================== 
+//= Any eAthena Version
+//===== Description: ========================================= 
+//= Resets skills, stats, or both.
+//===== Additional Comments: ================================= 
+//= 1.0 First Version
+//= 1.1 Optimized for the greater good. [Kisuka]
+//============================================================ 
+
+-	script	HourlyAnnounce	-1,{
+OnWhisperGlobal:
+OnInit: setarray .Messages$[0],"Cualquier bug reportalo en el foro! ","Diviertete y no olvides invitar a tus amigos ^^","Recuerda comportarte como es debido, un mal comportamiento te puede llebar a un baneo!"; end;
+OnMinute10: announce .Messages$[rand(getarraysize(.Messages$))],0; end;
+}
+
+prontera,159,183,4	script	Reset Girl	4_F_04,{
+	mes "[Reset Girl]";
+	mes "I can reset your stats and skills.";
+	mes "Stats: "+(5000*BaseLevel)+"z (5k x Lvl)";
+	mes "Skills: "+(5000*BaseLevel)+"z (5k x Lvl)";
+	mes "Both: "+(7000*BaseLevel)+"z (7k x Lvl)";
+	mes "Select the service you want:";
+	next;
+	switch(select("^FF3355Reset Skills:Reset Stats:Reset both^000000:Exit")) {
+		case 1:
+			mes "[Reset Girl]";
+			if (Zeny < 5000*BaseLevel) {
+				mes "Im sorry, you don't have enough zeny.";
+				close;
+			}
+			mes "Good, here we go!, Remember that maybe some changes don't take effect until you relog!";
+			set Zeny,Zeny-5000*BaseLevel;
+			resetskill;
+			close;
+		case 2:
+			mes "[Reset Girl]";
+			if (Zeny < 5000*BaseLevel) {
+				mes "Im sorry, you dont have enough zeny.";
+				close;
+			}
+			mes "Good, here we go!, Remember that maybe some changes don't take effect until you relog!";
+			set Zeny,Zeny-5000*BaseLevel;
+			resetstatus;
+			close;
+		case 3:
+			mes "[Reset Girl]";
+			if (Zeny < 7000*BaseLevel) {
+				mes "Im sorry, you dont have enough zeny.";
+				close;
+			}
+			mes "Good, here we go!, Remember that maybe some changes don't take effect until you relog!";
+			set Zeny,Zeny-7000*BaseLevel;
+			resetskill;
+			resetstatus;
+			close;
+		case 4:
+			close;
+	}
+}

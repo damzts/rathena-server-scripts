@@ -1,0 +1,190 @@
+
+
+-	script	announce	-1,{
+
+
+
+
+OnClock0110:
+OnClock0210:
+OnClock0310:
+OnClock0410:
+OnClock0510:
+OnClock0610:
+OnClock0710:
+OnClock0810:
+OnClock0910:
+OnClock1010:
+OnClock1110:
+OnClock1210:
+OnClock1310:
+OnClock1410:
+OnClock1510:
+OnClock1610:
+OnClock1710:
+OnClock1810:
+OnClock1910:
+OnClock2010:
+OnClock2110:
+OnClock2210:
+OnClock0010:
+
+
+
+initnpctimer;
+
+OnTimer0:
+
+announce "En Prontera ha aparecido el NPC - 'Evento Flower'.",0,0x99FFCC;
+
+announce "Recuerden se necesitan minimo 1 Jugadores para jugar'.",0,0x99FFCC;
+
+end;
+
+
+
+OnTimer2000:
+
+enablenpc "Evento Flower";
+
+announce "El evento empezará en 2 minuto",0,0x99FFCC;
+
+
+
+
+
+OnTimer30000:
+
+        announce "Ultimos 30 Segundos para comenzar el evento Flower s.",0,0x99FFCC;
+
+        sleep2 5000;
+
+        announce "Si quieres unirte habla con el npc Evento Flower (-GO 0).",0,0x99FFCC;
+
+        end;
+
+
+
+OnTimer50000:
+
+        announce "Últimos 10 segundos (-GO 0 Si no hay mas 1 User jugando El evento no comenzara).",0,0x99FFCC;
+
+        end;
+
+
+
+OnTimer60000:
+
+        announce "Se acabó el tiempo.",0,0x99FFCC;
+
+        end;
+
+
+
+OnTimer61000:
+
+stopnpctimer; //we disconnect the timer
+
+disablenpc "Evento Flower";
+
+if(getmapusers("guild_vs5") < 1) goto L_NotEnough;
+
+monster "guild_vs5",0,0,"Evento Flower",1083,150,"announce2::OnMobDead";
+
+	end;
+
+}
+
+//ssss
+
+guild_vs5,0,0,0	script	announce2	-1,{
+
+
+
+OnMobDead:
+
+	set $trava,getmapmobs("guild_vs5");
+
+	set $trava, $trava - 1;
+
+	set @z, @z + 1; // +1 ???
+
+	if(@z == 21) {goto prize;
+
+} // Mobs for the Victory 21=20,31=30....
+
+	if($trava < 10) {goto resp;
+
+} // Check on grasses.
+
+end;
+
+
+
+
+monster "guild_vs5",0,0,"Evento Flower",1083,150,"announce2::OnMobDead";
+
+end;
+
+
+
+prize:
+
+	killmonster "guild_vs5","All";
+
+	getitem 7539,30; // Prize ID ,How much
+	getitem 26021,3;
+
+	end;
+
+
+
+
+
+
+
+}
+
+
+
+prontera,146,165,4	script	Evento Flower	72,{
+
+mes "El evento empezará después de que todos los participantes estén registrados";
+
+mes "¿Quieres formar parte?";
+
+next;
+
+mes "está bien, regístrate";
+
+mes "¿Deseas ir a una locación del evento?";
+
+next;
+
+menu "Ir",case1,"Info",case2,"Noo 8)",case2;
+
+case1:
+
+set @z,1;
+
+warp "guild_vs5",0,0;
+
+mapannounce "guild_vs5","Si no hay mas de 1 Jugadores el evento no comenzara.",0,0x99FFCC;
+
+close;
+
+case2:
+
+mes "[Evento Flower]";
+
+mes "Spamearé 150 shining plant";
+
+mes "ganará el que primero";
+
+mes "mate 20 de ellas";
+
+mes "Buena suerte.";
+
+close;
+}
+guild_vs5	mapflag	noskill
